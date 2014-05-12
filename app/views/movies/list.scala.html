@@ -1,0 +1,8 @@
+@(movies: List[Movie])
+
+@main(Messages("application.name")) {
+  <dl class="movies">
+    @for(movie <- movies) {
+       <dt>@movie.movieTitle</dt>
+} </dl>
+}
