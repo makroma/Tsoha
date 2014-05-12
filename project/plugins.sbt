@@ -8,4 +8,3 @@ resolvers += "Typesafe repository" at "http://repo.typesafe.com/typesafe/release
 addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.2.2")
 
 //Dependencies
-libraryDependencies += "postgresql" % "postgresql" % "9.1-901-1.jdbc4"
