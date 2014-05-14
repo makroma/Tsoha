@@ -7,17 +7,17 @@ import anorm._
 import anorm.SqlParser._
 
 case class User(var id: Int, var name: String)
-//Model class:
+
 
 object User { //Data Access object - Companion
 
 
 	//Finder functions
 
-	//Parse SQL
+	//Parse SQL with Anorm.parser
 	val simple = {
-	    get[String]("name") ~
-	    get[Int]("id") map {
+	    get[String]("username") ~
+	    get[Int]("userid") map {
 	      case name~id => User(id, name)
     	}
   	}
@@ -30,8 +30,12 @@ object User { //Data Access object - Companion
 	}
 
 
-
 	def findAll = findAllSQL.toList.sortBy(_.name)
+
+	
+
+
+
 /*
 	def findByName(name: String) = users.find(_.name == name)
 
