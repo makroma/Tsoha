@@ -1,0 +1,27 @@
+@(users: List[User])
+
+
+<!--Left hand column-->
+<div class="col-md-8">
+
+
+</div>
+
+<!--Right hand column-->
+<div class="col-md-4">
+	<h3>Users</h3>
+	<table class="table table-striped table-hover ">
+		<thead>
+			<th>Id</th>
+			<th>Name</th>
+		</thead>
+
+		  
+	    @for(user <- users) {
+	    <tr>
+	       <th>@user.id</th>
+	       <th>@user.name</th>
+	   	</tr>
+		} 
+	</table>
+</div>

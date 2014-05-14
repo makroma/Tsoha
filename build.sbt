@@ -10,4 +10,6 @@ libraryDependencies ++= Seq(
 
 play.Project.playScalaSettings
 
-libraryDependencies += "postgresql" % "postgresql" % "9.1-901-1.jdbc4"
+libraryDependencies += "postgresql" % "postgresql" % "9.1-901.jdbc4"
+
+

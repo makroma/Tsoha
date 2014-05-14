@@ -6,10 +6,14 @@
 GET     /                           controllers.Application.index
 
 # Movies
-
 GET /Movies							controllers.Movies.list
+
+# Amin panel
+GET /Admin							controllers.Admin.list
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
 
+
+# Route show page to static html
 GET /esittelysivu   				controllers.Assets.at(path="/public", file="html/esittelysivu.html")
