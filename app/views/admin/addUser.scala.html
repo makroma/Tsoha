@@ -1,0 +1,41 @@
+@(userForm: Form[Aspirant])(implicit flash: Flash)
+
+@import helper._
+@import helper.twitterBootstrap._
+
+
+@admin.dashboard{
+	@helper.form(action = routes.Admin.adduser()) {
+	<form class="form-horizontal">
+	    <fieldset>
+	￼￼		<legend>Add new user info</legend>
+			<div class="form-group">
+      			<label for="username" class="col-lg-2 control-label">Name</label>
+      			<div class="col-lg-10">
+        			@helper.inputText(userForm("username"), 'class -> "form-control",
+        			'_label -> "", '_help -> "", 'placeholder -> "Username")
+      			</div>
+   			 </div>
+   			 <div class="form-group">
+      			<label for="password" class="col-lg-2 control-label">Password</label>
+      			<div class="col-lg-10">
+        			@helper.inputPassword(userForm("password.main"), 'class -> "form-control", '_error ->  
+        			"Passwords did not match", '_label -> "", '_help -> "", 'placeholder -> "Password")
+      			</div>
+   			 </div>
+   			 <div class="form-group">
+      			<label for="password" class="col-lg-2 control-label">Password</label>
+      			<div class="col-lg-10">
+        			@helper.inputPassword(userForm("password.confirm"), 'class -> "form-control", '_error ->
+        			"Passwords did not match", '_label -> "", '_help -> "", 'placeholder -> "Password")
+      			</div>
+   			 </div>
+   			 <div class="col-lg-10 col-lg-offset-2">
+   			 	<br><br>
+   			 	<input type="submit" class="btn primary" value='Add user'>
+   			 </div>
+		</fieldset>
+	</form>	
+	} 
+
+}(null)(flash)

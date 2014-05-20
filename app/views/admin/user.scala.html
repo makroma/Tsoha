@@ -1,0 +1,11 @@
+@(user: User)(implicit flash: Flash)
+
+
+<!--opens main.html with contructor parameters (title)(content)(loginform)
+----where html shown here is three column layout and "null" in the edn stands for login form-->
+@admin.dashboard{
+<!--Left hand column-->
+
+	<h3>User: @user.username</h3>
+
+}(null)(flash)

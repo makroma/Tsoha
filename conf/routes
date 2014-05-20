@@ -3,17 +3,28 @@
 # ~~~~
 
 # Home page
-GET     /                           controllers.Application.index
+GET    /                            controllers.Auth.authenticate
+GET    /logout                    	controllers.Auth.logout
 
 # Movies
 GET /Movies							controllers.Movies.list
 
-# Amin panel
-GET /Admin							controllers.Admin.list
+# Admin panel
+GET /Admin							controllers.Admin.dashboard
+GET /Admin/user/:id 				controllers.Admin.showUser(id: Int)
+POST /Admin/	 	   				controllers.Admin.adduser
+GET  /Admin/new  					controllers.Admin.newUser
+
+GET  /Admin/genres 					controllers.Admin.showGenres
+POST /Admin/genres	 	   			controllers.Admin.addgenre
+POST /Admin		 					controllers.Admin.deleteGenre(title:String)
+
+
 
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.at(path="/public", file)
+GET	/assets/*file               controllers.Assets.at(path="/public", file)
 
 
 # Route show page to static html
 GET /esittelysivu   				controllers.Assets.at(path="/public", file="html/esittelysivu.html")
+

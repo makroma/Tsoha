@@ -1,0 +1,23 @@
+@(genres: List[Genre])
+
+@import helper._
+
+<h3>Genres</h3>
+<table class="table table-striped table-hover ">
+	<thead>
+		<th>genre</th>
+		<th></th>
+	</thead>
+	<!--Users list-->
+    @for(g <- genres) {
+	    <tr>
+	    	<th>@g.title<th>
+	    	<th>
+	    			@form(routes.Admin.deleteGenre(g.title)) {
+            	<button type="submit" value=" Send" class="btn btn-xs" id="Delete" >
+            	del</button>
+          	}
+        </th>       	
+	   	</tr>
+	} 
+</table>
