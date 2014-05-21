@@ -57,8 +57,9 @@ object User { //Data Access object - Companion
 		return user
 	}
 
+	def findAll = findAllSQL.toList.sortWith(comp)
 
-	def findAll = findAllSQL.toList.sortBy(_.username)
+	def comp(e1: User, e2: User) = (e1.username compareToIgnoreCase e2.username) < 0
 
 
 	def checkUserPassword(username: String, password: String):Boolean = {
@@ -74,6 +75,12 @@ object User { //Data Access object - Companion
 			SQL("Insert into users(username, userpassword, admin) values({user}, {pssw}, false);").on('user ->username, 'pssw ->password).executeUpdate()	
 		} 
 		true	
+	}
+	def delete(name: String) {
+		DB.withConnection { implicit c =>
+			SQL("delete from users where username = {n}").on(
+		      'n -> name).executeUpdate()
+		}
 	}
 	
 }

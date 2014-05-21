@@ -7,23 +7,24 @@
 @admin.dashboard{
 
 	@helper.form(action = routes.Admin.addgenre()) {
-
-	<form class="form-horizontal">
-	    <fieldset>
-	￼￼		<legend>Add new genre</legend>
-			<div class="form-group">
-      			<label for="username" class="col-lg-2 control-label">Name</label>
-      			<div class="col-lg-10">
-        			@helper.inputText(genreForm("genre"), 'class -> "form-control",
-        			'_label -> "", '_help -> "", 'placeholder -> "genre")
-      			</div>
-   			 </div>
-   			 <div class="col-lg-10 col-lg-offset-2">
-   			 	<br><br>
-   			 	<input type="submit" class="btn primary" value='Add genre'>
-   			 </div>
-		</fieldset>
-	</form>	
+  <div class="well bs-component"> 
+  	<form class="form-horizontal">
+  	    <fieldset>
+  	￼￼		<legend>Add new genre</legend>
+  			<div class="form-group">
+        			<label for="username" class="col-lg-2 control-label">Name</label>
+        			<div class="col-lg-10">
+          			@helper.inputText(genreForm("genre"), 'class -> "form-control",
+          			'_label -> "", '_help -> "", 'placeholder -> "genre")
+        			</div>
+     			 </div>
+     			 <div class="col-lg-10 col-lg-offset-2">
+     			 	<br><br>
+     			 	<input type="submit" class="btn primary" value='Add genre'>
+     			 </div>
+  		</fieldset>
+  	</form>	
+  </div>
 	} 
 
 }(genres)(flash)

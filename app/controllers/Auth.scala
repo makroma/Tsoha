@@ -49,12 +49,22 @@ object Auth extends Controller {
     def authenticate = Action { implicit request =>
     	var movies = Movie.findAll
     	var genres = Genre.allSorted
-    	loginForm.bindFromRequest.fold(
-    		formWithErrors => BadRequest(html.movies.list(movies)(genres)(views.html.admin.login(formWithErrors))),
+    	val newLoginForm = loginForm.bindFromRequest()
+    	newLoginForm.fold(
+    		hasErrors = { formWithErrors => 
+    			BadRequest(html.movies.list(movies)(genres)(views.html.admin.login(formWithErrors))).flashing(
+            "error" -> "Unable to login")},
+    		success = { user => 
+    			
+    			println("suser:"+user)
 
-    		//formWithErrors => BadRequest(html.main("FlixKiller")(views.html.movies.list(movies))(views.html.admin.login(formWithErrors))),
-    		user => Redirect(routes.Admin.dashboard).withSession(Security.username -> user._1))
+    			Redirect(routes.Admin.dashboard).withSession(Security.username -> user._1)
+    			
+  			}
+  		)	
   	}
+
+
 
     def logout = Action {
     	Redirect(routes.Auth.authenticate).withNewSession.flashing(

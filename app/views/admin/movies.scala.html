@@ -1,0 +1,22 @@
+@(movies: List[Movie])
+
+@import helper._
+
+<h3>Movies</h3>
+<table class="table table-striped table-hover ">
+	<thead>
+		<th>Movie</th>
+		<th></th>
+	</thead>
+	<!--Users list-->
+    @for(m <- movies) {
+	    <tr>
+	    	<th>@m.title<th>
+	    	<th>
+	    		
+	    	</th>  
+          	
+             	
+	   	</tr>
+	} 
+</table>

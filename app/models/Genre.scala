@@ -11,7 +11,7 @@ case class Genre(title: String)
 object Genre{
 
 	//Parse SQL with Anorm.parser
-	
+
 	val simple = {
 	    get[String]("genrename") map {
 	      case title => Genre(title)
@@ -50,6 +50,8 @@ object Genre{
 	    }
 	}
 
-	def allSorted = getAll.toList.sortBy(_.title)
+	def allSorted = getAll.toList.sortWith(comp)
+
+	def comp(e1: Genre, e2: Genre) = (e1.title compareToIgnoreCase e2.title) < 0
 
 }

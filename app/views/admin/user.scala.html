@@ -3,9 +3,16 @@
 
 <!--opens main.html with contructor parameters (title)(content)(loginform)
 ----where html shown here is three column layout and "null" in the edn stands for login form-->
+@import helper._
+
 @admin.dashboard{
 <!--Left hand column-->
 
 	<h3>User: @user.username</h3>
+	@form(routes.Admin.deleteUser(user.username)) {
+		@if(!user.admin){
+        	<button type="submit" value=" Send" class="btn btn-xs" id="Delete">delete user account</button>
+    	}	
+    }
 
 }(null)(flash)

@@ -4,25 +4,35 @@
 
 # Home page
 GET    /                            controllers.Auth.authenticate
+POST /								controllers.Auth.authenticate
 GET    /logout                    	controllers.Auth.logout
 
 # Movies
 GET /Movies							controllers.Movies.list
 
-# Admin panel
+# Admin panel 
 GET /Admin							controllers.Admin.dashboard
-GET /Admin/user/:id 				controllers.Admin.showUser(id: Int)
-POST /Admin/	 	   				controllers.Admin.adduser
-GET  /Admin/new  					controllers.Admin.newUser
 
+#Admin userpage
+GET /Admin/user/:id 				controllers.Admin.showUser(id: Int)
+
+# Admin add and delete users
+POST /Admin/adduser	 	   			controllers.Admin.adduser
+GET  /Admin/new  					controllers.Admin.newUser
+POST /Admin/deleteuser				controllers.Admin.deleteUser(name:String)
+
+# Admin genres
 GET  /Admin/genres 					controllers.Admin.showGenres
 POST /Admin/genres	 	   			controllers.Admin.addgenre
-POST /Admin		 					controllers.Admin.deleteGenre(title:String)
+POST /Admin/deletegenre				controllers.Admin.deleteGenre(title:String)
 
+# Admin movies
+GET /Admin/movies 					controllers.Admin.showMovie
+POST /Admin/addmovie				controllers.Admin.addmovie
 
 
 # Map static resources from the /public folder to the /assets URL path
-GET	/assets/*file               controllers.Assets.at(path="/public", file)
+GET	/assets/*file               	controllers.Assets.at(path="/public", file)
 
 
 # Route show page to static html

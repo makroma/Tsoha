@@ -1,4 +1,4 @@
-@(movies: List[Movie])(genres: List[Genre])(login: Html)
+@(movies: List[Movie])(genres: List[Genre])(login: Html)(implicit flash: Flash)
 
 <!--opens main.html with contructor parameters (title)(content)(loginform)-->
 
@@ -19,11 +19,11 @@
 	@for(movie <- movies) {
 		<a href="#" class="box">
 			<!--cover image from db or from internet && ONE LINE TITLE(overflow hidden)-->
-			<img class="resize" src="http://content6.flixster.com/movie/10/93/63/10936392_det.jpg">
+			<img class="resize" src="@movie.coverImg">
 			<div class="title">
-				<span>@movie.movieTitle</span>
+				<span>@movie.title</span>
 		  	</div>		
 		</a>	
 	}
 
-}(login)
+}(login)(flash)

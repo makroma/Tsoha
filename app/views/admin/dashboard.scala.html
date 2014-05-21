@@ -7,21 +7,11 @@
 <!--Left hand column-->
 	<div class="col-md-8">
 		<a href="@routes.Admin.dashboard">Admin home</a> |  
-		<a href="@routes.Admin.newUser">Add new user</a> |
-		<a href="@routes.Admin.showGenres">Genres</a>
+		<a href="@routes.Admin.newUser">Users</a> |
+		<a href="@routes.Admin.showGenres">Genres</a> | 
+		<a href="@routes.Admin.showMovie">Movies</a>
 		<br><br>
 
-		@if(flash.get("success").isDefined){
-			<div class="alert alert-dismissable alert-success">
-				@flash.get("success")
-			</div> 
-		}
-
-		@if(flash.get("error").isDefined){
-			<div class="alert alert-dismissable alert-warning">
-				@flash.get("error")
-			</div>
-		}
 
 		@content
 
@@ -36,4 +26,4 @@
 		
 		
 	
-}(null)
+}(null)(flash)

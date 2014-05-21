@@ -1,63 +1,65 @@
-@(title: String)
-<form class="form-horizontal">
-  <fieldset>
-    <legend>Add a Movie</legend>
+@(movieForm: Form[Movie])(genres: List[Genre])(RightHand: Html)(implicit flash: Flash)
 
-    <div class="form-group">
-      <label for="inputTitle" class="col-lg-2 control-label">Title</label>
-      <div class="col-lg-10">
-        <input type="text" class="form-control" id="inputTitle" placeholder="Title">
-      </div>
-    </div>
+@import helper._
+@import helper.twitterBootstrap._
 
-    <div class="form-group">
-      <label for="inputYear" class="col-lg-2 control-label">Year</label>
-      <div class="col-lg-10">
-        <input type="text" class="form-control" id="inputYear" placeholder="Year">
-      </div>
-    </div>
+@admin.dashboard{
+  @helper.form(action = routes.Admin.addmovie()) {
+  <div class="well bs-component">
+    <form class="form-horizontal">
+      <fieldset>
+        <legend>Add a Movie</legend>
 
-    <div class="form-group">
-      <label for="plot" class="col-lg-2 control-label">Plot</label>
-      <div class="col-lg-10">
-        <textarea class="form-control" rows="3" id="plot"></textarea>
-        <span class="help-block">A longer block of help text that breaks onto a new line and may extend beyond one line.</span>
-      </div>
-    </div>
+        <!--Movie title group-->
+        <div class="form-group">
+          <label for="title" class="col-lg-2 control-label">Title</label>
+          <div class="col-lg-10">
+              @helper.inputText(movieForm("title"), 'class -> "form-control",
+              '_label -> "", '_help -> "", 'placeholder -> "Title")
+          </div>
+        </div>
 
-    <div class="form-group">
-      <label for="inputLenght" class="col-lg-2 control-label">Lenght</label>
-      <div class="col-lg-10">
-        <input type="text" class="form-control" id="inputLenght" placeholder="Lenght">
-      </div>
-    </div>
+        <!--Select Multiple-->
 
+        <div class="form-group">
+          <label for="select" class="col-lg-2 control-label">Genres (not working yet)</label>
+          <div class="col-lg-10">
 
-    <div class="form-group">
-      <label for="select" class="col-lg-2 control-label">Genres</label>
-      <div class="col-lg-10">
-        <select multiple="" class="form-control">
-          <option>Action</option>
-          <option>Comedy</option>
-          <option>War</option>
-          <option>Crime</option>
-          <option>Thriller</option>
-        </select>
-      </div>
-    </div>
+            <select multiple="" class="form-control">
+              @for(g <- genres){
+                <option>@g.title</option>
+              }
+            </select>
+          </div>
+        </div>
 
-	<div class="form-group">
-      <label for="inputLink" class="col-lg-2 control-label">Link to the Movie</label>
-      <div class="col-lg-10">
-        <input type="text" class="form-control" id="inputLenght" placeholder="Link to the Movie">
-      </div>
-    </div>
+        <!--Links-->
+
+        <div class="form-group">
+          <label for="link" class="col-lg-2 control-label">Link to the movie</label>
+          <div class="col-lg-10">
+              @helper.inputText(movieForm("link"), 'class -> "form-control",
+              '_label -> "", '_help -> "", 'placeholder -> "Link to the movie")
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="coverimg"ername class="col-lg-2 control-label">Link to the cover image</label> 
+          <div class="col-lg-10">
+              @helper.inputText(movieForm("coverimg"), 'class -> "form-control",
+              '_label -> "", '_help -> "", 'placeholder -> "Link to the cover image")
+          </div>
+        </div>
 
 
-    <div class="form-group">
-      <div class="col-lg-10 col-lg-offset-2">
-        <button type="submit" class="btn btn-primary">Submit</button>
-      </div>
-    </div>
-  </fieldset>
-</form>
+
+
+        <div class="form-group">
+          <div class="col-lg-10 col-lg-offset-2">
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </div>
+        </div>
+      </fieldset>
+    </form>
+  </div>
+  }
+}(RightHand)(flash)

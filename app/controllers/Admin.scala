@@ -5,12 +5,13 @@ import play.api.mvc._
 import play.api.mvc.Flash
 import play.api.data._
 import play.api.data.Form._
-import play.api.data.Forms.{mapping, number, nonEmptyText, boolean, tuple, text}
+import play.api.data.Forms.{mapping, number, nonEmptyText, boolean, tuple, text, seq}
 import play.api.mvc.{Action, Controller}
 
 import models.User
 import models.Aspirant
 import models.Genre
+import models.Movie
 
 object Admin extends Controller {
 
@@ -69,27 +70,29 @@ object Admin extends Controller {
     val newUserForm = userForm.bindFromRequest()
     newUserForm.fold(
       hasErrors = { form =>
-        //println("has errors." + form)
-        BadRequest(views.html.admin.addUser(form)).flashing(
-        //Redirect(routes.Admin.newUser()).flashing(//Flash(form.data) +
+        BadRequest(views.html.admin.addUser(form)(views.html.admin.users(User.findAll))).flashing(
             "error" -> "Something went wrong, maybe username is taken or passwords didnt match ")},
       success = { user =>
         println("success.")
         User.addUser(user.username, user.userpassword)
-        Redirect(routes.Admin.showUser(User.idByName(user.username)))
+        Ok(views.html.admin.addUser(userForm)(views.html.admin.users(User.findAll))).flashing(
+            "success" -> "New user added")
       } 
     )
   }
 
   def newUser = Action { implicit request =>
+    val users = User.findAll
     val form = 
     if (flash.get("error").isDefined) {
-      println("error, flashing data: " + flash.data)
         userForm.bind(flash.data)
-        //flash
     } else userForm
 
-    Ok(views.html.admin.addUser(form))
+    Ok(views.html.admin.addUser(form)(views.html.admin.users(users)))
+  }
+  def deleteUser(name: String) = Action {
+    User.delete(name)
+    Redirect(routes.Admin.newUser)
   }
 
   /*
@@ -103,15 +106,13 @@ object Admin extends Controller {
     )(Genre.apply)(Genre.unapply)
   )
 
-    def addgenre = Action { implicit request =>
+  def addgenre = Action { implicit request =>
     val newGenreForm = genreForm.bindFromRequest()
     newGenreForm.fold(
       hasErrors = { form =>
-        println("genre has errors")
         BadRequest(views.html.admin.editGenre(form)(views.html.admin.genres(Genre.allSorted))).flashing(
             "error" -> "Something went wrong, maybe name taken")},
       success = { genre =>
-        println("success.")
         Genre.addGenre(genre.title)
         Ok(views.html.admin.editGenre(genreForm)(views.html.admin.genres(Genre.allSorted))).flashing(
             "success" -> "New genre added")
@@ -122,9 +123,7 @@ object Admin extends Controller {
   def showGenres = Action { implicit request =>
     val form = 
     if (flash.get("error").isDefined) {
-      println("error, flashing data: " + flash.data)
         genreForm.bind(flash.data)
-        //flash
     } else genreForm
 
     Ok(views.html.admin.editGenre(form)(views.html.admin.genres(Genre.allSorted)))
@@ -133,10 +132,45 @@ object Admin extends Controller {
   def deleteGenre(title: String) = Action {
     Genre.delete(title)
     Redirect(routes.Admin.showGenres)
-}
+  }
+
+  /*
+  Movie functions
+  -form
+  -addmovie = Action
+  -showmovie = Action
+  */
+
+  val movieForm: Form[Movie] = Form(
+    mapping(
+      "title" -> text,
+      "link" -> text,
+      "coverimg" -> text
+    )(Movie.apply)(Movie.unapply)
+  )
 
 
+  def addmovie = Action { implicit request =>
+    val newMovieForm = movieForm.bindFromRequest()
+    newMovieForm.fold(
+      hasErrors = { form =>
+        println("movie has errors")
+        BadRequest(views.html.admin.addMovie(form)(Genre.allSorted)(views.html.admin.movies(Movie.findAll))).flashing(
+            "error" -> "Something went wrong, maybe name taken")},
+      success = { movie =>
 
+        Movie.addMovie(movie.title, movie.link, movie.coverImg)
+        Ok(views.html.admin.addMovie(movieForm)(Genre.allSorted)(views.html.admin.movies(Movie.findAll))).flashing(
+            "success" -> "New movie added")
+      } 
+    )
+  }
 
-
+  def showMovie = Action { implicit request =>
+    val form = 
+    if (flash.get("error").isDefined) {
+        movieForm.bind(flash.data)
+    } else movieForm
+    Ok(views.html.admin.addMovie(form)(Genre.allSorted)(views.html.admin.movies(Movie.findAll)))
+  }
 }

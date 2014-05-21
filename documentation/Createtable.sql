@@ -5,7 +5,6 @@
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS Movies (
     MovieId   SERIAL NOT NULL, --unique ID
-    GenreId   INT NULL,
     MovieTitle   VARCHAR(200) NULL,
     Year   INT NULL,
     Plot   VARCHAR(800) NULL,
@@ -35,18 +34,14 @@ CREATE TABLE IF NOT EXISTS Genres   (
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS Genres_has_Movies   (
     Genres_GenreId   SERIAL NOT NULL,
-    Movies_GenreId   SERIAL NOT NULL,
-  PRIMARY KEY (  Genres_GenreId  ,   Movies_GenreId  ),
+    Movies_MovieId   SERIAL NOT NULL,
+  PRIMARY KEY (  Genres_GenreId  ,   Movies_MovieId  ),
   CONSTRAINT   fk_Genres_has_Movies_Genres  
     FOREIGN KEY (  Genres_GenreId  )
-    REFERENCES   Genres   (  GenreId  )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    REFERENCES   Genres   (  GenreId  ),
   CONSTRAINT   fk_Genres_has_Movies_Movies1  
-    FOREIGN KEY (  Movies_GenreId  )
+    FOREIGN KEY (  Movies_MovieId  )
     REFERENCES   Movies   (  MovieId  )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION
 );
 
 
@@ -72,14 +67,10 @@ CREATE TABLE IF NOT EXISTS Grades   (
   PRIMARY KEY (  Users_UserId  ,   Movies_MovieId  ),
   CONSTRAINT   fk_Users_has_Movies_Users1  
     FOREIGN KEY (  Users_UserId  )
-    REFERENCES   Users   (  UserId  )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    REFERENCES   Users   (  UserId  ),
   CONSTRAINT   fk_Users_has_Movies_Movies1  
     FOREIGN KEY (  Movies_MovieId  )
     REFERENCES   Movies   (  MovieId  )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION
 );
 
 
@@ -92,13 +83,9 @@ CREATE TABLE IF NOT EXISTS Watchlist   (
   PRIMARY KEY (  Users_UserId  ,   Movies_MovieId  ),
   CONSTRAINT   fk_Watchlist_Users1  
     FOREIGN KEY (  Users_UserId  )
-    REFERENCES   Users   (  UserId  )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    REFERENCES   Users   (  UserId  ),
   CONSTRAINT   fk_Watchlist_Movies1  
     FOREIGN KEY (  Movies_MovieId  )
     REFERENCES   Movies   (  MovieId  )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION
 );
 

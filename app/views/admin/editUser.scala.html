@@ -5,7 +5,7 @@
 
 @admin.dashboard {
   @helper.form(action = routes.Admin.adduser()) {
-
+  <div class="well bs-component"> 
     <fieldset>
       <legend>Add new user info</legend>
       <div class="form-group">
@@ -22,6 +22,6 @@
          </div>
       </fieldset>
     <p><input type="submit" class="btn primary"value='save'></p>
-
+  </div>
   } 
 }(null)(flash)
