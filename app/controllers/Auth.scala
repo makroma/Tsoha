@@ -55,9 +55,7 @@ object Auth extends Controller {
     			BadRequest(html.movies.list(movies)(genres)(views.html.admin.login(formWithErrors))).flashing(
             "error" -> "Unable to login")},
     		success = { user => 
-    			
-    			println("suser:"+user)
-
+   
     			Redirect(routes.Admin.dashboard).withSession(Security.username -> user._1)
     			
   			}
