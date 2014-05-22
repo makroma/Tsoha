@@ -1,0 +1,30 @@
+
+TODO:
+
+-Login / Sign up omiksi sivuiksiin, linkit navigointipaneeliin
+	-(sosiaalinen rekisteröityminen)
+
+-Elokuvan lisäyslomakkeen viimeistely
+	-option seq[String] genrejen lisäys
+	-muiden elokuvatietojen lisäys lomakkeeseen	
+
+-Elokuvaikkuna
+	-soitin
+	-tiedot
+	-(arvostelu)
+	-(elokuva ehdotuksia)
+	-(katselulista)
+
+-Arvostelujärjestelmä
+
+-Käyttäjäsivu
+	-omien tietojen muuttaminen
+	-(katselulista)
+	-tilin poistaminen
+
+-elokuvien filtteröinti 	
+	-filtteröinti tulokset omille sivuilleen
+
+-authenticated session
+	-käyttöönotto admin sivuille
+	-elokuvaikkunaan omanäkymä kirjautuneelle ja vierailijalle
