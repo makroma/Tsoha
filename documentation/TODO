@@ -28,3 +28,6 @@ TODO:
 -authenticated session
 	-käyttöönotto admin sivuille
 	-elokuvaikkunaan omanäkymä kirjautuneelle ja vierailijalle
+
+-execute vs executeUpdate with return value	vs. executeInsert
+-one query and map vs queries
