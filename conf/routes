@@ -3,12 +3,14 @@
 # ~~~~
 
 # Home page
-GET    /                            controllers.Auth.authenticate
-POST /								controllers.Auth.authenticate
-GET    /logout                    	controllers.Auth.logout
+GET  /                           	controllers.Application.index
+GET /logout           	         	controllers.Auth.logout
+GET /login							controllers.Auth.login
+POST /login							controllers.Auth.authenticate
+GET /direct 						controllers.Auth.userDirect
 
 # Movies
-GET /Movies							controllers.Movies.list
+# GET /Movies						controllers.Movies.list
 
 # Admin panel 
 GET /Admin							controllers.Admin.dashboard
@@ -18,7 +20,7 @@ GET /Admin/user/:id 				controllers.Admin.showUser(id: Int)
 
 # Admin add and delete users
 POST /Admin/adduser	 	   			controllers.Admin.adduser
-GET  /Admin/new  					controllers.Admin.newUser
+GET  /Admin/user  					controllers.Admin.newUser
 POST /Admin/deleteuser				controllers.Admin.deleteUser(name:String)
 
 # Admin genres

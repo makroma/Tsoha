@@ -51,6 +51,7 @@ object Genre{
 	}
 
 	def allSorted = getAll.toList.sortWith(comp)
+	def allSeq = getAll.toSeq.sortWith(comp)
 
 	def comp(e1: Genre, e2: Genre) = (e1.title compareToIgnoreCase e2.title) < 0
 

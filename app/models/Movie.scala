@@ -6,15 +6,19 @@ import play.api.Play.current
 import anorm._
 import anorm.SqlParser._
 
-case class Movie(title: String, link:String, coverImg:String)	
+case class Movie(title: String, link:String, coverImg:String, genres:List[Genre])	
 
 object Movie{
+
+	/*
+	Select * from genres_has_movies where movieid ={movieid};
+	*/
 
    val simple = {
   		get[String]("movietitle") ~
 	    get[String]("link") ~
 	    get[String]("coverimg") map {
-	      case title~link~coverImg => Movie(title, link, coverImg)
+	      case title~link~coverImg => Movie(title, link, coverImg, null)
     	}
   	}
 
@@ -36,5 +40,4 @@ object Movie{
 				""").on('t ->title, 'link ->link, 'cover -> coverimg).executeUpdate()	
 		} 
    	}
-
 }	

@@ -1,0 +1,51 @@
+@(form: Form[(String,String)])(implicit flash: Flash)
+
+<!--Login page-->
+
+
+@main("Login"){
+	@helper.form(routes.Auth.authenticate) {
+    <div class="col-md-8">
+    	<div class="well">
+    		<form class="form-horizontal">
+	  			<fieldset>
+			    <legend>Login</legend>
+
+			    <div class="form-group">
+			    	<label for="username" class="col-lg-2 control-label">Username</label>
+	      			<div class="col-lg-10">
+	        			<input type="username" class="form-control" name="username" placeholder="Username" id="username" value="@form("username").value">
+	      			</div>
+					
+				</div>
+				<div class="form-group">
+					<label for="password" class="col-lg-2 control-label">Password</label>
+		      		<div class="col-lg-10">	
+						<input type="password" class="form-control" name="password" id="password" placeholder="Password">
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-lg-5 col-lg-offset-2">
+						<button type="submit" class="btn btn-success" id="loginbutton">Login</button>
+					</div>
+					<div class="col-lg-5">
+						@form.globalError.map { error =>
+					  		<p class="text-warning">@error.message</p>
+					    }
+					    
+					    @flash.get("success").map { message =>
+					    	<p class="text-success">@message</p>
+					    }
+					    <p class="note">
+			    			Try <em>admin</em> with <em>1234</em> as password.
+						</p>
+					</div>    
+				</div>
+			    
+			}
+			</fieldset>
+			</form>
+		</div>
+	</div>
+
+} 

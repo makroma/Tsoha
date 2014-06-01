@@ -1,4 +1,4 @@
-@(title: String)(content: Html)(login: Html)(implicit flash: Flash)
+@(title: String)(content: Html)(implicit flash: Flash) 
 
 
 <!DOCTYPE html>
@@ -27,34 +27,14 @@
                 </div>    
                 <div id="navbar-main" class="navbar-collapse collapse">
                     <!--Navbar content-->
-                    
 
-                   <!--Right hand search bar-->
-                    <form class="navbar-form navbar-right">
-                    @if(login!=null){
-                        @login
-                    } else {
-                        <a class="btn btn-success" role="button"href="@routes.Auth.logout" class="logout">logout</a>
-                    }
-                    </form>
+                    @navbar()
+                    
                 </div>
             </div>
         </div>
         <div class="container-fluid">
             <!--Content section starts from here-->
-             @if(flash.get("success").isDefined){
-                <div class="alert alert-dismissable alert-success">
-                    @flash.get("success")
-                </div> 
-            }
-
-            @if(flash.get("error").isDefined){
-                <div class="alert alert-dismissable alert-warning">
-                    @flash.get("error")
-                </div>
-            }
-
-
             @content
         </div>
     </body>

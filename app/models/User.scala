@@ -44,7 +44,6 @@ object User { //Data Access object - Companion
 
 
 	def findByName(name:String): Option[User] = {
-		println("findByName..")
 		DB.withConnection { implicit connection =>
 	    	SQL("select * from users where username = {username};").on('username -> name).as(User.full.singleOpt)
 	    }
@@ -63,10 +62,16 @@ object User { //Data Access object - Companion
 
 
 	def checkUserPassword(username: String, password: String):Boolean = {
+		print("checkUserPassword: ")
 		var user:User = findByName(username).getOrElse(null)
-		println(user)
-		if(user!=null && user.userpassword == password && user.username == username) true
-		else false
+		if(user!=null && user.userpassword == password && user.username == username) {
+			println("userpassword mach")	
+			true
+		}	
+		else {
+			println("not maching")
+			false
+		}	
 	}
 
 	def addUser(username: String, password: String):Boolean ={
@@ -76,6 +81,7 @@ object User { //Data Access object - Companion
 		} 
 		true	
 	}
+
 	def delete(name: String) {
 		DB.withConnection { implicit c =>
 			SQL("delete from users where username = {n}").on(

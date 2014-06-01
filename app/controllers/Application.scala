@@ -3,10 +3,25 @@ package controllers
 import play.api._
 import play.api.mvc._
 
-object Application extends Controller {
+import models.Movie
+import models.Genre
+import models.User
+import controllers.Auth
+import views._
 
-  def index = Action {
-    Redirect(routes.Auth.authenticate)
-  }
+object Application extends Controller with Secured{
 
+
+	/*
+	Fronpage renderer, "index = action" opens frontpage, with movies list
+	*/
+
+	def index = Action { implicit request =>
+		var movies = Movie.findAll
+  		var genres = Genre.allSorted
+
+  		//@(movies: List[Movie])(genres: List[Genre])(navbar: Html)
+		Ok(html.movies.list(movies)(genres))
+  
+	}
 }

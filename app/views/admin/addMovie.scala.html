@@ -1,4 +1,4 @@
-@(movieForm: Form[Movie])(genres: List[Genre])(RightHand: Html)(implicit flash: Flash)
+@(movieForm: Form[Movie])(genres:List[Genre])(RightHand: Html)(implicit flash: Flash)
 
 @import helper._
 @import helper.twitterBootstrap._
@@ -19,19 +19,7 @@
           </div>
         </div>
 
-        <!--Select Multiple-->
 
-        <div class="form-group">
-          <label for="select" class="col-lg-2 control-label">Genres (not working yet)</label>
-          <div class="col-lg-10">
-
-            <select multiple="" class="form-control">
-              @for(g <- genres){
-                <option>@g.title</option>
-              }
-            </select>
-          </div>
-        </div>
 
         <!--Links-->
 
@@ -50,7 +38,19 @@
           </div>
         </div>
 
+                <!--Select Multiple-->
 
+        <div class="form-group">
+          <label for="select" class="col-lg-2 control-label">Genres (not working yet)</label>
+          <div class="col-lg-10">
+
+            <select multiple="" name="genres[]" id="genres" class="form-control">
+               @genres.map{ e =>
+               <option value='@e.title'>@e.title</option>)
+               }
+            </select>
+          </div>
+        </div>
 
 
         <div class="form-group">
