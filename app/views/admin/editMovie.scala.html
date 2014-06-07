@@ -1,0 +1,10 @@
+@(user:String)(movie: Movie)(genres:List[Genre])(RightHand: Html)(implicit flash: Flash)
+
+@import helper._
+@import models.Genre
+@import helper.twitterBootstrap._
+@import play.api.data.Form._
+
+@admin.dashboard(user){
+ <h1>Edit movie: @movie.title
+}(RightHand)(flash)

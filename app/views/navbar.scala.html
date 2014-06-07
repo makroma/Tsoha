@@ -1,14 +1,40 @@
+@(user:String)
+
+<div class="navbar-header">
+    <!--Navbar branding and responsive collapse menu-->
+
+    <a class="navbar-brand navbar-center" href="@routes.Application.index">FlixKiller</a>
+    Welcome <a href="#">@user</a>
+    <button class="navbar-toggle" data-target="#navbar-main" data-toggle="collapse" type="button">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+    </button>
+</div>    
+<div id="navbar-main" class="navbar-collapse collapse">
+    <!--Navbar content-->
+	<ul class="nav navbar-nav navbar-right">
+
+		@if(user==null){
+
+			<li>
+				<a href="@routes.Auth.login" class="login">login</a>
+			</li>
+
+		} else{
+			@if(user == "admin"){
+				<li>	
+					<a href="@routes.Admin.dashboard" class="dashboard">Dashboard</a>
+				</li>
+			}
+
+			<li>	
+				<a href="@routes.Auth.logout" class="logout">logout</a>
+			</li>
+		}
+	</ul>
+</div>
 
 
 
 
-
-<ul class="nav navbar-nav navbar-right">
-	<li>
-	<a href="@routes.Auth.login" class="login">login</a>
-	</li>
-
-	<li>	
-		<a href="@routes.Auth.logout" class="logout">logout</a>
-	</li>
-</ul>

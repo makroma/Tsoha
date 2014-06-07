@@ -1,10 +1,10 @@
-@(genreForm: Form[Genre])(genres: Html)(implicit flash: Flash)
+@(user:String)(genreForm: Form[Genre])(genres: Html)(implicit flash: Flash)
 
 @import helper._
 @import helper.twitterBootstrap._
 
 
-@admin.dashboard{
+@admin.dashboard(user){
 
 	@helper.form(action = routes.Admin.addgenre()) {
   <div class="well bs-component"> 

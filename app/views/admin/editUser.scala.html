@@ -1,9 +1,9 @@
-@(userForm: Form[Aspirant])(implicit flash: Flash)
+@(user:String)(userForm: Form[Aspirant])(implicit flash: Flash)
 
 @import helper._
 @import helper.twitterBootstrap._
 
-@admin.dashboard {
+@admin.dashboard(user) {
   @helper.form(action = routes.Admin.adduser()) {
   <div class="well bs-component"> 
     <fieldset>

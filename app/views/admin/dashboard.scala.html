@@ -1,9 +1,9 @@
-@(content: Html)(right: Html)(implicit flash: Flash)
+@(user:String)(content: Html)(right: Html)(implicit flash: Flash)
 
 
 <!--opens main.html with contructor parameters (title)(content)(loginform)
 - - where html shown here is three column layout and "null" in the edn stands for login form-->
-@main("Admin Dashboard"){
+@main(user, "Admin Dashboard"){
 <!--Left hand column-->
 	<div class="col-md-8">
 		<a href="@routes.Admin.dashboard">Admin home</a> |  

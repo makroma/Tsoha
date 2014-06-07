@@ -5,29 +5,24 @@ import play.api.mvc._
 import play.api.mvc.Flash
 import play.api.data._
 import play.api.data.Form._
-import play.api.data.Forms.{mapping, number, nonEmptyText, boolean, tuple, text, seq, list}
+import play.api.data.Forms.{mapping, number, nonEmptyText, boolean, tuple, text, seq, list, optional, ignored}
 import play.api.mvc.{Action, Controller}
 
-import models.User
-import models.Aspirant
-import models.Genre
-import models.Genres
-import models.Movie
+import anorm._
+import anorm.SqlParser._
 
-
-
-case class Admin(user:User)
+import models._
 
 object Admin extends Controller with Secured{
 
   /*
-  Dashboard renderer @(content: Html)(right: Html)(implicit flash: Flash)
+  Dashboard renderer @(user:String)(content: Html)(right: Html)(implicit flash: Flash)
   uses "withAuth" action to authenticate user cookie
   */
 
 	def dashboard = withAuth { username => implicit request =>
     val users = User.findAllSQL
-    Ok(views.html.admin.dashboard(null)(views.html.admin.users(users)))
+    Ok(views.html.admin.dashboard(Auth.username(request).getOrElse(null))(null)(views.html.admin.users(users)))
 	}
 
   /*
@@ -36,7 +31,7 @@ object Admin extends Controller with Secured{
 
   def showUser(id: Int) = withAuth { username => implicit request =>
       User.findById(id).map {user =>
-	  		Ok(views.html.admin.user(user))
+	  		Ok(views.html.admin.user(Auth.username(request).getOrElse(null))(user))
 		}.getOrElse(NotFound)
   }
 
@@ -76,12 +71,12 @@ object Admin extends Controller with Secured{
       hasErrors = { form =>
 
         //@(userForm: Form[Aspirant])(RightHand: Html)(user: User)(implicit flash: Flash)
-        BadRequest(views.html.admin.addUser(form)(views.html.admin.users(User.findAll))).flashing(
+        BadRequest(views.html.admin.addUser(Auth.username(request).getOrElse(null))(form)(views.html.admin.users(User.findAll))).flashing(
             "error" -> "Something went wrong, maybe username is taken or passwords didnt match ")},
       success = { user =>
         println("success.")
         User.addUser(user.username, user.userpassword)
-        Ok(views.html.admin.addUser(userForm)(views.html.admin.users(User.findAll))).flashing(
+        Ok(views.html.admin.addUser(Auth.username(request).getOrElse(null))(userForm)(views.html.admin.users(User.findAll))).flashing(
             "success" -> "New user added")
       } 
     )
@@ -94,7 +89,7 @@ object Admin extends Controller with Secured{
         userForm.bind(flash.data)
     } else userForm
 
-    Ok(views.html.admin.addUser(form)(views.html.admin.users(users)))
+    Ok(views.html.admin.addUser(Auth.username(request).getOrElse(null))(form)(views.html.admin.users(users)))
   }
 
   def deleteUser(name: String) = Action {
@@ -108,6 +103,7 @@ object Admin extends Controller with Secured{
 
   val genreForm: Form[Genre] = Form(
     mapping(
+      "id" -> ignored(NotAssigned: anorm.Pk[Int]),
       "genre" -> text.verifying(
         "Not unique genre", Genre.findByGenre(_).isEmpty)
     )(Genre.apply)(Genre.unapply)
@@ -117,11 +113,11 @@ object Admin extends Controller with Secured{
     val newGenreForm = genreForm.bindFromRequest()
     newGenreForm.fold(
       hasErrors = { form =>
-        BadRequest(views.html.admin.editGenre(form)(views.html.admin.genres(Genre.allSorted))).flashing(
+        BadRequest(views.html.admin.editGenre(Auth.username(request).getOrElse(null))(form)(views.html.admin.genres(Genre.allSorted))).flashing(
             "error" -> "Something went wrong, maybe name taken")},
       success = { genre =>
         Genre.addGenre(genre.title)
-        Ok(views.html.admin.editGenre(genreForm)(views.html.admin.genres(Genre.allSorted))).flashing(
+        Ok(views.html.admin.editGenre(Auth.username(request).getOrElse(null))(genreForm)(views.html.admin.genres(Genre.allSorted))).flashing(
             "success" -> "New genre added")
       } 
     )
@@ -133,7 +129,7 @@ object Admin extends Controller with Secured{
         genreForm.bind(flash.data)
     } else genreForm
 
-    Ok(views.html.admin.editGenre(form)(views.html.admin.genres(Genre.allSorted)))
+    Ok(views.html.admin.editGenre(Auth.username(request).getOrElse(null))(form)(views.html.admin.genres(Genre.allSorted)))
   }
 
   def deleteGenre(title: String) = Action {
@@ -152,18 +148,17 @@ object Admin extends Controller with Secured{
 
     //maps form content
     mapping(
-      "title" -> text,
+      "id" -> ignored(NotAssigned: anorm.Pk[Int]),
+      "title" -> nonEmptyText.verifying(
+        "Not a unique name", Movie.findByName(_).isEmpty),
       "link" -> text,
       "coverimg" -> text,
-      "select" -> list(
-
-        //mapping of Genre List not working!
-
-        mapping( "genres" -> text
-        )(Genre.apply)(Genre.unapply)
-      )
+      "genres[]" -> list(text),
+      "plot" -> optional(text),
+      "year" -> optional(number)
     )(Movie.apply)(Movie.unapply)
   )
+
 
 
   def addmovie = Action { implicit request =>
@@ -171,14 +166,15 @@ object Admin extends Controller with Secured{
     newMovieForm.fold(
 
       hasErrors = { form =>
-        println("movie has errors")
-        BadRequest(views.html.admin.addMovie(form)(Genre.allSorted)(views.html.admin.movies(Movie.findAll))).flashing(
+
+        BadRequest(views.html.admin.addMovie((Auth.username(request).getOrElse(null)))(form)(Genre.allSorted)(views.html.admin.movies(Movie.findAll))).flashing(
             "error" -> "Something went wrong")},
 
       success = { movie =>
-        println(movie)
-        Movie.addMovie(movie.title, movie.link, movie.coverImg)
-        Ok(views.html.admin.addMovie(movieForm)(Genre.allSorted)(views.html.admin.movies(Movie.findAll))).flashing(
+        Movie.addMovie(movie)
+        movie.genres.foreach(println)
+        Genres.addGenresToMovie(movie.genres, Movie.getID(movie.title))
+        Ok(views.html.admin.addMovie(Auth.username(request).getOrElse(null))(movieForm)(Genre.allSorted)(views.html.admin.movies(Movie.findAll))).flashing(
             "success" -> "New movie added")
       } 
     )
@@ -187,8 +183,15 @@ object Admin extends Controller with Secured{
   def showMovie = withAuth { username => implicit request =>
     val form = 
     if (flash.get("error").isDefined) {
-        movieForm.bind(flash.data)
-    } else movieForm
-    Ok(views.html.admin.addMovie(form)(Genre.allSorted)(views.html.admin.movies(Movie.findAll)))
+      movieForm.bind(flash.data)
+    }
+    else movieForm
+    Ok(views.html.admin.addMovie(Auth.username(request).getOrElse(null))(form)(Genre.allSorted)(views.html.admin.movies(Movie.findAll)))
+  }
+
+  def edit(id:Int)  = withAuth { username => implicit request =>
+
+    Ok(views.html.admin.editMovie(Auth.username(request).getOrElse(null))(Movie.findById(id).getOrElse(null))(Genre.allSorted)(views.html.admin.movies(Movie.findAll)))
+  
   }
 }

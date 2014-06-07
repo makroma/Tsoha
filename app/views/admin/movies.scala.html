@@ -11,7 +11,7 @@
 	<!--Users list-->
     @for(m <- movies) {
 	    <tr>
-	    	<th>@m.title<th>
+	    	<th><a href="@routes.Admin.edit(m.id.get)">@m.title</a><th>
 	    	<th>
 	    		
 	    	</th>  

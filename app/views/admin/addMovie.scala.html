@@ -1,9 +1,11 @@
-@(movieForm: Form[Movie])(genres:List[Genre])(RightHand: Html)(implicit flash: Flash)
+@(user:String)(movieForm: Form[Movie])(genres:List[Genre])(RightHand: Html)(implicit flash: Flash)
 
 @import helper._
+@import models.Genre
 @import helper.twitterBootstrap._
+@import play.api.data.Form._
 
-@admin.dashboard{
+@admin.dashboard(user){
   @helper.form(action = routes.Admin.addmovie()) {
   <div class="well bs-component">
     <form class="form-horizontal">
@@ -30,6 +32,7 @@
               '_label -> "", '_help -> "", 'placeholder -> "Link to the movie")
           </div>
         </div>
+
         <div class="form-group">
           <label for="coverimg"ername class="col-lg-2 control-label">Link to the cover image</label> 
           <div class="col-lg-10">
@@ -38,20 +41,48 @@
           </div>
         </div>
 
-                <!--Select Multiple-->
+        <!--Select Multiple-->
 
         <div class="form-group">
-          <label for="select" class="col-lg-2 control-label">Genres (not working yet)</label>
+          <label for="select" class="col-lg-2 control-label">Genres</label>
           <div class="col-lg-10">
+            <div id="select_field" class="clearfix ">
+              <div class="input">
+                <select multiple="" name="genres[]" id="genres" class="form-control">
 
-            <select multiple="" name="genres[]" id="genres" class="form-control">
-               @genres.map{ e =>
-               <option value='@e.title'>@e.title</option>)
-               }
-            </select>
+
+                  @for(g <- genres) {
+                  
+                    <option value="@g.title" name="@g.title" >@g.title</option> 
+
+                  }
+                </select>
+                <span class="help-inline"></span>
+                <span class="help-block"></span>
+              </div>
+            </div>
           </div>
         </div>
 
+        <!--Plot-->
+
+        <div class="form-group">
+          <label for="plot"ername class="col-lg-2 control-label">Plot</label> 
+          <div class="col-lg-10">
+              @helper.textarea(movieForm("plot"), 'class -> "form-control", 
+              '_label -> "", '_help -> "", 'placeholder -> "Plot", 'rows -> 5)
+          </div>
+        </div>
+
+        <!--year-->
+
+        <div class="form-group">
+          <label for="plot"ername class="col-lg-2 control-label">Year</label> 
+          <div class="col-lg-10">
+              @helper.inputText(movieForm("year"), 'class -> "form-control", 
+              '_label -> "", '_help -> "", 'placeholder -> "Year")
+          </div>
+        </div>
 
         <div class="form-group">
           <div class="col-lg-10 col-lg-offset-2">

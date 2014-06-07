@@ -54,6 +54,27 @@ img.resize{
     width:100%; 
     height: auto;
 }
+img.cover{
+    padding-bottom: 30px;
+    padding-top: 5px;
+    width:  100%; 
+    height: auto;
+}
+
 .form-group{
     padding-bottom: 60px;
 }
+
+.videoscreen {
+    padding-top: 130px;
+}
+.infoscreen {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+.navbar-brand.navbar-center {
+    display: inline-block;
+    float: none;
+}
+
+

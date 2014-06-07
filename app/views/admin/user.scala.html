@@ -1,16 +1,16 @@
-@(user: User)(implicit flash: Flash)
+@(user:String)(user2: User)(implicit flash: Flash)
 
 
 <!--opens main.html with contructor parameters (title)(content)(loginform)
 ----where html shown here is three column layout and "null" in the edn stands for login form-->
 @import helper._
 
-@admin.dashboard{
+@admin.dashboard(user){
 <!--Left hand column-->
 
-	<h3>User: @user.username</h3>
-	@form(routes.Admin.deleteUser(user.username)) {
-		@if(!user.admin){
+	<h3>User: @user2.username</h3>
+	@form(routes.Admin.deleteUser(user2.username)) {
+		@if(!user2.admin){
         	<button type="submit" value=" Send" class="btn btn-xs" id="Delete">delete user account</button>
     	}	
     }

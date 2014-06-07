@@ -11,6 +11,8 @@ GET /direct 						controllers.Auth.userDirect
 
 # Movies
 # GET /Movies						controllers.Movies.list
+GET /m/:id 							controllers.Movies.showMovie(id:Int)
+GET /f/:genre 						controllers.Movies.filterByGenre(genre:String)
 
 # Admin panel 
 GET /Admin							controllers.Admin.dashboard
@@ -32,6 +34,7 @@ POST /Admin/deletegenre				controllers.Admin.deleteGenre(title:String)
 GET /Admin/movies 					controllers.Admin.showMovie
 POST /Admin/addmovie				controllers.Admin.addmovie
 
+GET /Admin/movies/:id				controllers.Admin.edit(id:Int)
 
 # Map static resources from the /public folder to the /assets URL path
 GET	/assets/*file               	controllers.Assets.at(path="/public", file)

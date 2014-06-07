@@ -52,7 +52,6 @@ object User { //Data Access object - Companion
 	def idByName(name:String): Int = {
 		print("idByName..")
 		val user:Int = findByName(name).map { user => user.userid }.getOrElse(-1)
-		println(user)	
 		return user
 	}
 

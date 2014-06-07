@@ -29,7 +29,7 @@ object Auth extends Controller with Secured{
 		User.checkUserPassword(username, password)
 	}
 
-	/*
+	/**
 	Login form authenticate. 
 	*/
 
@@ -42,6 +42,7 @@ object Auth extends Controller with Secured{
   */
 
   def authenticate = Action { implicit request =>
+
   	loginForm.bindFromRequest.fold(
       formWithErrors => BadRequest(html.auth.login(formWithErrors)),
       user => Redirect(routes.Auth.userDirect).withSession("username" -> user._1)
@@ -67,9 +68,7 @@ object Auth extends Controller with Secured{
       "success" -> "You are now logged is as user")
   } 
 
-  def userFromCookie(implicit request: RequestHeader) = { 
-    request.session.get("username").flatMap(username => User.findByName(username))
-  }  
+
 }  
 
 /**
@@ -85,13 +84,14 @@ trait Secured {
 
   def withAuth(f: => String => Request[AnyContent] => Result) = {
     Security.Authenticated(username, onUnauthorized) { user =>
-
-      println("Authenticated user: "+user)
+      //Authenticated 
       val u = User.findByName(user).getOrElse(null)
+      
       if(u.admin) Action(request => f(user)(request))
       else Action(request => f(user)(request))
     }
   }
+
   def withUser(f: User => Request[AnyContent] => Result) = withAuth { username => implicit request =>
     User.findByName(username).map { user =>
       f(user)(request)
