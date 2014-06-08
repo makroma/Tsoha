@@ -15,38 +15,38 @@ object User { //Data Access object - Companion
 	//Parse SQL with Anorm.parser
 	val simple = {
 		get[Int]("userid") ~
-	    get[String]("username") ~
-	    get[Boolean]("admin") map {
-	      case id~name~admin => User(id, name, null, admin)
-    	}
-  	}
-  	val full = {
-  		get[Int]("userid") ~
-	    get[String]("username") ~
-	    get[String]("userpassword") ~
-	    get[Boolean]("admin") map {
-	      case id~name~userpassword~admin => User(id, name, userpassword, admin)
-    	}
-  	}
+			get[String]("username") ~
+			get[Boolean]("admin") map {
+				case id~name~admin => User(id, name, null, admin)
+			}
+	}
+	val full = {
+		get[Int]("userid") ~
+		get[String]("username") ~
+		get[String]("userpassword") ~
+		get[Boolean]("admin") map {
+			case id~name~userpassword~admin => User(id, name, userpassword, admin)
+		}
+	}
 
 	def findAllSQL(): List[User] = {
-	    DB.withConnection { implicit connection =>
-	      SQL("select * from users;").as(User.simple *)
-	    }
+		DB.withConnection { implicit connection =>
+			SQL("select * from users;").as(User.simple *)
+		}
 	}
 
 	def findById(id:Int): Option[User] = {
 		println("findById..")
 		DB.withConnection { implicit connection =>
-	    	SQL("select * from users where userid = {id};").on('id -> id).as(User.full.singleOpt)
-	    }
+			SQL("select * from users where userid = {id};").on('id -> id).as(User.full.singleOpt)
+		}
 	}
 
 
 	def findByName(name:String): Option[User] = {
 		DB.withConnection { implicit connection =>
-	    	SQL("select * from users where username = {username};").on('username -> name).as(User.full.singleOpt)
-	    }
+				SQL("select * from users where username = {username};").on('username -> name).as(User.full.singleOpt)
+		}
 	}
 
 	def idByName(name:String): Int = {
@@ -84,8 +84,7 @@ object User { //Data Access object - Companion
 	def delete(name: String) {
 		DB.withConnection { implicit c =>
 			SQL("delete from users where username = {n}").on(
-		      'n -> name).executeUpdate()
+					'n -> name).executeUpdate()
 		}
 	}
-	
 }

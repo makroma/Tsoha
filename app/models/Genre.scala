@@ -14,10 +14,10 @@ object Genre{
 
 	val simple = {
 		get[Pk[Int]]("genreid") ~
-	    get[String]("genrename") map {
-	      case id~title => Genre(id, title)
-    	}
-  	}
+		get[String]("genrename") map {
+			case id~title => Genre(id, title)
+		}
+	}
 
 	def addGenre(title:String) = {
 		println("addGenre: " + title)
@@ -33,29 +33,29 @@ object Genre{
 	def delete(title: String) {
 		DB.withConnection { implicit c =>
 			SQL("delete from genres where genrename = {title}").on(
-		      'title -> title
-		    ).executeUpdate()
+					'title -> title
+			).executeUpdate()
 		}
 	}
 
 	def findByGenre(title:String): Option[Genre] = {
 		println("findByGenre " + title )
 		DB.withConnection { implicit connection =>
-	    	SQL("select * from genres where genrename = {t};").on('t -> title).as(simple.singleOpt)
-	    }
+				SQL("select * from genres where genrename = {t};").on('t -> title).as(simple.singleOpt)
+		}
 	}
 
 	def findGenreId(title:String): Option[Genre] = {
 		DB.withConnection { implicit connection =>
-	    	SQL("select genreid from genres where genrename = {t};").on('t -> title).as(simple.singleOpt)
-	    }
+				SQL("select genreid from genres where genrename = {t};").on('t -> title).as(simple.singleOpt)
+		}
 	}
 
 
 	def getAll(): List[Genre] = {
 		DB.withConnection { implicit connection =>
-	    	SQL("select * from genres;").as(simple *)
-	    }
+				SQL("select * from genres;").as(simple *)
+		}
 	}
 
 	def getGenresWithMovies(): List[Genre] = {
@@ -68,12 +68,10 @@ object Genre{
 		}
 	}
 
-
-
 	def allSorted = getAll.toList.sortWith(comp)
+
 	def allSeq = getAll.toSeq.sortWith(comp)
 
 	def comp(e1: Genre, e2: Genre) = (e1.title compareToIgnoreCase e2.title) < 0
-
 
 }

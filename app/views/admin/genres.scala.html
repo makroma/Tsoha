@@ -10,18 +10,18 @@
 		<th></th>
 	</thead>
 	<!--Users list-->
-    @for(g <- genres) {
-	    <tr>
-	    	<th>@g.title<th>
-	    	<th>
-	    		@if(Genres.isAttachedToMovie(g.title)){
-		    		@form(routes.Admin.deleteGenre(g.title)) {
-	            		<button type="submit" value="Send" class="btn btn-xs" id="Delete">del</button>
-	          		}
-          		} else {
-          		<p>Genre has movie</p>
-          		}
-        </th>       	
-	   	</tr>
+	@for(g <- genres) {
+		<tr>
+			<th>@g.title<th>
+			<th>
+				@if(Genres.isAttachedToMovie(g.title)){
+					@form(routes.Admin.deleteGenre(g.title)) {
+						<button type="submit" value="Send" class="btn btn-xs" id="Delete">del</button>
+					}
+				} else {
+				<p>Genre has movie</p>
+				}
+			</th>       	
+		</tr>
 	} 
 </table>
