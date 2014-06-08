@@ -6,7 +6,7 @@ import play.api.Play.current
 import anorm._
 import anorm.SqlParser._
 
-case class User(userid:Int, username: String, userpassword:String, admin:Boolean)
+case class User(userid: anorm.Pk[Int] = NotAssigned, username: String, userpassword:String, admin:Boolean)
 
 
 object User { //Data Access object - Companion
@@ -14,14 +14,14 @@ object User { //Data Access object - Companion
 
   //Parse SQL with Anorm.parser
   val simple = {
-    get[Int]("userid") ~
-      get[String]("username") ~
-      get[Boolean]("admin") map {
-        case id~name~admin => User(id, name, null, admin)
-      }
+    get[Pk[Int]]("userid") ~
+    get[String]("username") ~
+    get[Boolean]("admin") map {
+      case id~name~admin => User(id, name, null, admin)
+    }
   }
   val full = {
-    get[Int]("userid") ~
+    get[Pk[Int]]("userid") ~
     get[String]("username") ~
     get[String]("userpassword") ~
     get[Boolean]("admin") map {
@@ -51,8 +51,8 @@ object User { //Data Access object - Companion
 
   def idByName(name:String): Int = {
     print("idByName..")
-    val user:Int = findByName(name).map { user => user.userid }.getOrElse(-1)
-    return user
+    val user:Pk[Int] = findByName(name).map { user => user.userid }.get
+    return user.get
   }
 
   def findAll = findAllSQL.toList.sortWith(comp)
@@ -85,6 +85,18 @@ object User { //Data Access object - Companion
     DB.withConnection { implicit c =>
       SQL("delete from users where username = {n}").on(
           'n -> name).executeUpdate()
+    }
+  }
+
+  def updateNamePass(user:User, password:String) {
+    DB.withConnection{ implicit connection =>
+      SQL(
+        """
+        update users 
+        set userpassword = {p}
+        where userid = {id};
+        """
+        ).on('p -> password, 'id -> user.userid).executeUpdate()
     }
   }
 }

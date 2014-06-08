@@ -60,8 +60,8 @@ object Admin extends Controller with Secured{
   parameters for ones named after the form’s fields and uses them as 
   those fields values. Validation happens in binding. 
   If errors, redirects to add page. 
-  if success, adds user to db. Db adds unique Id to user, which in this
-  point is '-1'. Find same user by name and redirect to userpage.
+  if success, adds user to db. Db adds unique Id to user. 
+  Find same user by name and redirect to userpage.
   */
 
   def adduser = withAuth { username =>  implicit request =>

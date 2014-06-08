@@ -43,3 +43,7 @@ GET /assets/*file                   controllers.Assets.at(path="/public", file)
 # Route show page to static html
 GET /esittelysivu                   controllers.Assets.at(path="/public", file="html/esittelysivu.html")
 
+# User page
+GET /u/:username                    controllers.Userpage.showUserPage(username: String)
+POST /u/editUser                    controllers.Userpage.editUser
+

@@ -4,7 +4,7 @@
     <!--Navbar branding and responsive collapse menu-->
 
     <a class="navbar-brand navbar-center" href="@routes.Application.index">FlixKiller</a>
-    @if(user!=null){Welcome <a href="#">@user</a>}          
+    @if(user!=null){Welcome <a href="@routes.Userpage.showUserPage(user)">@user</a>}          
     <button class="navbar-toggle" data-target="#navbar-main" data-toggle="collapse" type="button">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>

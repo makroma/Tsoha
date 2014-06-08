@@ -17,8 +17,7 @@ object Movies extends Controller {
     Movie.findById(id).map { movie =>
         Ok(views.html.movies.movie(Auth.username(request).getOrElse(null))(movie))
     }.getOrElse(NotFound)
-    
-    }
+  }
 
   /*
   Renders filtered result
