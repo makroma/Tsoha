@@ -28,7 +28,7 @@ object Userpage extends Controller with Secured{
 
       val form = {
         if (flash.get("error").isDefined) userForm.bind(flash.data)
-        else userForm.fill(new PassWord(user.userpassword))
+        else userForm.fill(new Password(user.userpassword))
       }
 
       Ok(views.html.user.page(user, form))
@@ -40,7 +40,7 @@ object Userpage extends Controller with Secured{
   Userform for editing existing user
   */
 
-  val userForm:Form[PassWord]= Form(
+  val userForm:Form[Password] = Form(
     mapping(
       "password" -> tuple(
         "main" -> nonEmptyText,
@@ -50,7 +50,7 @@ object Userpage extends Controller with Secured{
           { case (main, confirm) => main },
           ( main: String) => ("", "")
        )   
-    )(PassWord.apply)(PassWord.unapply)
+    )(Password.apply)(Password.unapply)
   )
 
   /*
@@ -58,22 +58,26 @@ object Userpage extends Controller with Secured{
   */
 
   def editUser = withAuth { username =>  implicit request =>
-    print("editUser ")
+
     val authUser = Auth.username(request).getOrElse(null)
     val aUser:User = User.findByName(authUser).getOrElse(null)
-
     val newUserForm = userForm.bindFromRequest()
+
     newUserForm.fold(
       hasErrors = { form =>
-        println("some error")
         BadRequest(views.html.user.page(aUser, form)).flashing(
           "error" -> "Something went wrong, maybe username is taken or passwords didnt match ")},
-      success = { user =>
-        User.updateNamePass(aUser, user.password) 
-        println("update successfull.")
-         Redirect(routes.Userpage.showUserPage(authUser)).flashing(
+      success = { update =>
+        User.updateNamePass(aUser, update.password) 
+        Redirect(routes.Userpage.showUserPage(authUser)).flashing(
           "success" -> "Password change successfull!")
       } 
     )
+  }
+  
+  def deleteUser(name: String) = Action {
+    User.delete(name)
+    Redirect(routes.Auth.authenticate).withNewSession.flashing(
+      "success" -> "User account deleted!")
   }
 }

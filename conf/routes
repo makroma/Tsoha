@@ -46,4 +46,5 @@ GET /esittelysivu                   controllers.Assets.at(path="/public", file="
 # User page
 GET /u/:username                    controllers.Userpage.showUserPage(username: String)
 POST /u/editUser                    controllers.Userpage.editUser
+POST /u/delete                      controllers.Userpage.deleteUser(name:String)
 
