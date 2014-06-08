@@ -3,43 +3,43 @@
 # ~~~~
 
 # Home page
-GET  /                           	controllers.Application.index
-GET /logout           	         	controllers.Auth.logout
-GET /login							controllers.Auth.login
-POST /login							controllers.Auth.authenticate
-GET /direct 						controllers.Auth.userDirect
+GET  /                              controllers.Application.index
+GET /logout                         controllers.Auth.logout
+GET /login                          controllers.Auth.login
+POST /login                         controllers.Auth.authenticate
+GET /direct                         controllers.Auth.userDirect
 
 # Movies
-# GET /Movies						controllers.Movies.list
-GET /m/:id 							controllers.Movies.showMovie(id:Int)
-GET /f/:genre 						controllers.Movies.filterByGenre(genre:String)
+# GET /Movies                       controllers.Movies.list
+GET /m/:id                          controllers.Movies.showMovie(id:Int)
+GET /f/:genre                       controllers.Movies.filterByGenre(genre:String)
 
 # Admin panel 
-GET /Admin							controllers.Admin.dashboard
+GET /Admin                          controllers.Admin.dashboard
 
 #Admin userpage
-GET /Admin/user/:id 				controllers.Admin.showUser(id: Int)
+GET /Admin/user/:id                 controllers.Admin.showUser(id: Int)
 
 # Admin add and delete users
-POST /Admin/adduser	 	   			controllers.Admin.adduser
-GET  /Admin/user  					controllers.Admin.newUser
-POST /Admin/deleteuser				controllers.Admin.deleteUser(name:String)
+POST /Admin/adduser                 controllers.Admin.adduser
+GET  /Admin/user                    controllers.Admin.newUser
+POST /Admin/deleteuser              controllers.Admin.deleteUser(name:String)
 
 # Admin genres
-GET  /Admin/genres 					controllers.Admin.showGenres
-POST /Admin/genres	 	   			controllers.Admin.addgenre
-POST /Admin/deletegenre				controllers.Admin.deleteGenre(title:String)
+GET  /Admin/genres                  controllers.Admin.showGenres
+POST /Admin/genres                  controllers.Admin.addgenre
+POST /Admin/deletegenre             controllers.Admin.deleteGenre(title:String)
 
 # Admin movies
-GET /Admin/movies 					controllers.Admin.showMovie
-POST /Admin/addmovie				controllers.Admin.addmovie
+GET /Admin/movies                   controllers.Admin.showMovie
+POST /Admin/addmovie                controllers.Admin.addmovie
 
-GET /Admin/movies/:id				controllers.Admin.edit(id:Int)
+GET /Admin/movies/:id               controllers.Admin.edit(id:Int)
 
 # Map static resources from the /public folder to the /assets URL path
-GET	/assets/*file               	controllers.Assets.at(path="/public", file)
+GET /assets/*file                   controllers.Assets.at(path="/public", file)
 
 
 # Route show page to static html
-GET /esittelysivu   				controllers.Assets.at(path="/public", file="html/esittelysivu.html")
+GET /esittelysivu                   controllers.Assets.at(path="/public", file="html/esittelysivu.html")
 

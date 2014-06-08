@@ -5,41 +5,41 @@
 <!--opens main.html with contructor parameters (title)(content)(loginform)
 - - where html shown here is three column layout and "null" in the edn stands for login form-->
 @main(user, "Movie"){
-	<!--Left hand column-->
-	<div class="col-md-4">
-		<div class="videoscreen">
-			<video id="video" class="video-js vjs-default-skin" controls
-			 preload="auto" width="360" height="264" poster="MY_VIDEO_POSTER.jpg"
-			 data-setup="{}">
-			 <source src="@mo.link" type='video/mp4'>
-			 <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
-			</video>
-		</div>
-	</div>
+    <!--Left hand column-->
+    <div class="col-md-4">
+        <div class="videoscreen">
+            <video id="video" class="video-js vjs-default-skin" controls
+             preload="auto" width="360" height="264" poster="MY_VIDEO_POSTER.jpg"
+             data-setup="{}">
+             <source src="@mo.link" type='video/mp4'>
+             <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
+            </video>
+        </div>
+    </div>
 
-	<!--Right hand column-->
-	<div class="col-md-8">
-		<h1>@mo.title </h1>
-		<div class="infoscreen">
-		<p>
+    <!--Right hand column-->
+    <div class="col-md-8">
+        <h1>@mo.title </h1>
+        <div class="infoscreen">
+        <p>
 
-			@if(mo.year!= None){@mo.year &nbsp;&nbsp;-&nbsp;&nbsp;}
+            @if(mo.year!= None){@mo.year &nbsp;&nbsp;-&nbsp;&nbsp;}
 
-			@for((g, index) <- Genres.getMovieGenres(mo.title).zipWithIndex){
-				<a href="@routes.Movies.filterByGenre(g)">@g</a>@if(index < Genres.getMovieGenres(mo.title).size-1){,&nbsp;}
-			}
-			&nbsp;&nbsp;-&nbsp;&nbsp;Published on 
-			@Movie.addingDate(mo.title)
-		</p>
-		</div>
-		<div class="col-md-3">
-		<img class="cover" src="@mo.coverImg">
-		</div>
-		<div class="col-md-8">
-		<p>@mo.plot</p>
-		</div>
-	</div>	
-			
-		
-	
+            @for((g, index) <- Genres.getMovieGenres(mo.title).zipWithIndex){
+                <a href="@routes.Movies.filterByGenre(g)">@g</a>@if(index < Genres.getMovieGenres(mo.title).size-1){,&nbsp;}
+            }
+            &nbsp;&nbsp;-&nbsp;&nbsp;Published on 
+            @Movie.addingDate(mo.title)
+        </p>
+        </div>
+        <div class="col-md-3">
+        <img class="cover" src="@mo.coverImg">
+        </div>
+        <div class="col-md-8">
+        <p>@mo.plot</p>
+        </div>
+    </div>  
+            
+        
+    
 }(flash)

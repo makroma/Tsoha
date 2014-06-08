@@ -5,22 +5,22 @@
 - - where html shown here is three column layout and "null" in the edn stands for login form-->
 @main(user, "Admin Dashboard"){
 <!--Left hand column-->
-	<div class="col-md-8">
-		<a href="@routes.Admin.dashboard">Admin home</a> |  
-		<a href="@routes.Admin.newUser">Users</a> |
-		<a href="@routes.Admin.showGenres">Genres</a> | 
-		<a href="@routes.Admin.showMovie">Movies</a>
-		<br><br>
+    <div class="col-md-8">
+        <a href="@routes.Admin.dashboard">Admin home</a> |  
+        <a href="@routes.Admin.newUser">Users</a> |
+        <a href="@routes.Admin.showGenres">Genres</a> | 
+        <a href="@routes.Admin.showMovie">Movies</a>
+        <br><br>
 
-		@content
+        @content
 
-	</div>
+    </div>
 
-	<!--Right hand column-->
-	<div class="col-md-4">
+    <!--Right hand column-->
+    <div class="col-md-4">
 
-		@right
+        @right
 
-	</div>	
-	
+    </div>  
+    
 }(flash)

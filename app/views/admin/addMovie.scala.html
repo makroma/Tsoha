@@ -6,87 +6,87 @@
 @import play.api.data.Form._
 
 @admin.dashboard(user){
-	@helper.form(action = routes.Admin.addmovie()) {
-	<div class="well bs-component">
-		<form class="form-horizontal">
-			<fieldset>
-				<legend>Add a Movie</legend>
+    @helper.form(action = routes.Admin.addmovie()) {
+    <div class="well bs-component">
+        <form class="form-horizontal">
+            <fieldset>
+                <legend>Add a Movie</legend>
 
-				<!--Movie title group-->
-				<div class="form-group">
-					<label for="title" class="col-lg-2 control-label">Title</label>
-					<div class="col-lg-10">
-						@helper.inputText(movieForm("title"), 'class -> "form-control",
-						'_label -> "", '_help -> "", 'placeholder -> "Title")
-					</div>
-				</div>
+                <!--Movie title group-->
+                <div class="form-group">
+                    <label for="title" class="col-lg-2 control-label">Title</label>
+                    <div class="col-lg-10">
+                        @helper.inputText(movieForm("title"), 'class -> "form-control",
+                        '_label -> "", '_help -> "", 'placeholder -> "Title")
+                    </div>
+                </div>
 
-				<!--Links-->
+                <!--Links-->
 
-				<div class="form-group">
-					<label for="link" class="col-lg-2 control-label">Link to the movie</label>
-					<div class="col-lg-10">
-						@helper.inputText(movieForm("link"), 'class -> "form-control",
-						'_label -> "", '_help -> "", 'placeholder -> "Link to the movie")
-					</div>
-				</div>
+                <div class="form-group">
+                    <label for="link" class="col-lg-2 control-label">Link to the movie</label>
+                    <div class="col-lg-10">
+                        @helper.inputText(movieForm("link"), 'class -> "form-control",
+                        '_label -> "", '_help -> "", 'placeholder -> "Link to the movie")
+                    </div>
+                </div>
 
-				<div class="form-group">
-					<label for="coverimg"ername class="col-lg-2 control-label">Link to the cover image</label> 
-					<div class="col-lg-10">
-						@helper.inputText(movieForm("coverimg"), 'class -> "form-control",
-						'_label -> "", '_help -> "", 'placeholder -> "Link to the cover image")
-					</div>
-				</div>
+                <div class="form-group">
+                    <label for="coverimg"ername class="col-lg-2 control-label">Link to the cover image</label> 
+                    <div class="col-lg-10">
+                        @helper.inputText(movieForm("coverimg"), 'class -> "form-control",
+                        '_label -> "", '_help -> "", 'placeholder -> "Link to the cover image")
+                    </div>
+                </div>
 
-				<!--Select Multiple-->
+                <!--Select Multiple-->
 
-				<div class="form-group">
-					<label for="select" class="col-lg-2 control-label">Genres</label>
-					<div class="col-lg-10">
-						<div id="select_field" class="clearfix ">
-							<div class="input">
-								<select multiple="" name="genres[]" id="genres" class="form-control">
-									@for(g <- genres) {
-										<option value="@g.title" name="@g.title" >@g.title</option> 
-									}
-								</select>
-								<span class="help-inline"></span>
-								<span class="help-block"></span>
-							</div>
-						</div>
-					</div>
-				</div>
+                <div class="form-group">
+                    <label for="select" class="col-lg-2 control-label">Genres</label>
+                    <div class="col-lg-10">
+                        <div id="select_field" class="clearfix ">
+                            <div class="input">
+                                <select multiple="" name="genres[]" id="genres" class="form-control">
+                                    @for(g <- genres) {
+                                        <option value="@g.title" name="@g.title" >@g.title</option> 
+                                    }
+                                </select>
+                                <span class="help-inline"></span>
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-				<!--Plot-->
+                <!--Plot-->
 
-				<div class="form-group">
-					<label for="plot"ername class="col-lg-2 control-label">Plot</label> 
-					<div class="col-lg-10">
-						@helper.textarea(movieForm("plot"), 'class -> "form-control", 
-						'_label -> "", '_help -> "", 'placeholder -> "Plot", 'rows -> 5)
-					</div>
-				</div>
+                <div class="form-group">
+                    <label for="plot"ername class="col-lg-2 control-label">Plot</label> 
+                    <div class="col-lg-10">
+                        @helper.textarea(movieForm("plot"), 'class -> "form-control", 
+                        '_label -> "", '_help -> "", 'placeholder -> "Plot", 'rows -> 5)
+                    </div>
+                </div>
 
-				<!--year-->
+                <!--year-->
 
-				<div class="form-group">
-					<label for="plot"ername class="col-lg-2 control-label">Year</label> 
-					<div class="col-lg-10">
-						@helper.inputText(movieForm("year"), 'class -> "form-control", 
-						'_label -> "", '_help -> "", 'placeholder -> "Year")
-					</div>
-				</div>
+                <div class="form-group">
+                    <label for="plot"ername class="col-lg-2 control-label">Year</label> 
+                    <div class="col-lg-10">
+                        @helper.inputText(movieForm("year"), 'class -> "form-control", 
+                        '_label -> "", '_help -> "", 'placeholder -> "Year")
+                    </div>
+                </div>
 
-				<!--Submit-->
+                <!--Submit-->
 
-				<div class="form-group">
-					<div class="col-lg-10 col-lg-offset-2">
-						<button type="submit" class="btn btn-primary">Submit</button>
-					</div>
-				</div>
-			</fieldset>
-		</form>
-	</div>
-	}
+                <div class="form-group">
+                    <div class="col-lg-10 col-lg-offset-2">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    }
 }(RightHand)(flash)

@@ -3,19 +3,19 @@
 
 <h3>Users</h3>
 <table class="table table-striped table-hover ">
-	<thead>
-		<th>Id</th>
-		<th>Name</th>
-		<th>Admin</th>
-	</thead>
-	<!--Users list-->
+    <thead>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Admin</th>
+    </thead>
+    <!--Users list-->
     @for(user <- users) {
-	    <tr>
-	    	<th>@user.userid</th>
-	       	<th><a href="@routes.Admin.showUser(user.userid)">@user.username</a></th>
-	       	<th>@user.admin</th>
-	   	</tr>
-	} 
+        <tr>
+            <th>@user.userid</th>
+            <th><a href="@routes.Admin.showUser(user.userid)">@user.username</a></th>
+            <th>@user.admin</th>
+        </tr>
+    } 
 </table>
-		
-	
+        
+    

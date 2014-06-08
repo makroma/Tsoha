@@ -1,11 +1,11 @@
 
 .filter{
-	width: 16.888%;
-	min-width: 180px;
+    width: 16.888%;
+    min-width: 180px;
     max-width: 300px;
-	float: left;
-	margin-right: 20px;
-	margin-top: 10px;
+    float: left;
+    margin-right: 20px;
+    margin-top: 10px;
 }
 
 .box-default {
@@ -34,20 +34,20 @@
 }
 .box:hover,
 .box:focus {
-  	text-decoration: none;
-  	background-color: gray;
+    text-decoration: none;
+    background-color: gray;
 }
 .title{
-	padding-top: 14px;
-	text-align: center;
-	height: 40px;
-	width: 100%;
-	overflow: hidden;
+    padding-top: 14px;
+    text-align: center;
+    height: 40px;
+    width: 100%;
+    overflow: hidden;
     white-space: nowrap;
 }
 .title span { 
-	display:inline-block; 
-	vertical-align:middle 
+    display:inline-block; 
+    vertical-align:middle 
 }
 
 img.resize{

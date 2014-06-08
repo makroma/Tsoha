@@ -5,26 +5,26 @@
 
 @main(user, "FlixKiller"){
 <!--Left hand column-->
-	<div class="filter">
-		<!--Filters (for thrue db"genres")-->
-		<ul class="nav nav-pills nav-stacked">
-  			<li class="@("active".when(active == "All"))"><a href="@routes.Application.index">All</a></li>
-  			@for(g <- genres){
-  				<li class="@("active".when(active == g.title))"><a href="@routes.Movies.filterByGenre(g.title)">@g.title</a></li>
-  			}
-  		</ul>
-	</div>
+    <div class="filter">
+        <!--Filters (for thrue db"genres")-->
+        <ul class="nav nav-pills nav-stacked">
+            <li class="@("active".when(active == "All"))"><a href="@routes.Application.index">All</a></li>
+            @for(g <- genres){
+                <li class="@("active".when(active == g.title))"><a href="@routes.Movies.filterByGenre(g.title)">@g.title</a></li>
+            }
+        </ul>
+    </div>
 
-	<!--Right hand column-->
+    <!--Right hand column-->
 
-	@for(movie <- movies) {
-		<a href="@routes.Movies.showMovie(movie.id.get)" class="box">
-			<!--cover image from db or from internet && ONE LINE TITLE(overflow hidden)-->
-			<img class="resize" src="@movie.coverImg">
-			<div class="title">
-				<span>@movie.title</span>
-		  	</div>		
-		</a>	
-	}
+    @for(movie <- movies) {
+        <a href="@routes.Movies.showMovie(movie.id.get)" class="box">
+            <!--cover image from db or from internet && ONE LINE TITLE(overflow hidden)-->
+            <img class="resize" src="@movie.coverImg">
+            <div class="title">
+                <span>@movie.title</span>
+            </div>      
+        </a>    
+    }
 
 }(null)

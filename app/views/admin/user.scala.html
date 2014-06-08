@@ -8,11 +8,11 @@
 @admin.dashboard(user){
 <!--Left hand column-->
 
-	<h3>User: @user2.username</h3>
-	@form(routes.Admin.deleteUser(user2.username)) {
-		@if(!user2.admin){
-        	<button type="submit" value=" Send" class="btn btn-xs" id="Delete">delete user account</button>
-    	}	
+    <h3>User: @user2.username</h3>
+    @form(routes.Admin.deleteUser(user2.username)) {
+        @if(!user2.admin){
+            <button type="submit" value=" Send" class="btn btn-xs" id="Delete">delete user account</button>
+        }   
     }
 
 }(null)(flash)
