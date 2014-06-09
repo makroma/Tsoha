@@ -48,3 +48,5 @@ GET /u/:username                    controllers.Userpage.showUserPage(username: 
 POST /u/editUser                    controllers.Userpage.editUser
 POST /u/delete                      controllers.Userpage.deleteUser(name:String)
 
+# Error page
+GET /error                          controllers.Application.error(message:String)

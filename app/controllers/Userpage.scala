@@ -17,9 +17,9 @@ object Userpage extends Controller with Secured{
 
   /*
     Renders moviepage or return 404
-    */  
+  */  
 
-  def showUserPage(usern: String) = Action { implicit request =>
+  def showUserPage(usern: String) = withUser{ user => implicit request =>
 
     val authUser = Auth.username(request).getOrElse(null)
     
@@ -74,7 +74,7 @@ object Userpage extends Controller with Secured{
       } 
     )
   }
-  
+
   def deleteUser(name: String) = Action {
     User.delete(name)
     Redirect(routes.Auth.authenticate).withNewSession.flashing(

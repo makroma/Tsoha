@@ -5,6 +5,10 @@ import play.api.mvc._
 import play.api.data._
 import play.api.data.Forms._
 import play.api.mvc.Security
+import play.api.mvc.Results._
+
+import scala.concurrent._
+import play.api.mvc.Results._
 
 import models.User
 import models.Movie
@@ -58,17 +62,31 @@ object Auth extends Controller with Secured{
   * User Direction based on roles not implemented yet
   */
 
-  def userDirect = withUser{ user => implicit request =>
+  def userDirect = withUser { user => implicit request =>
     val username = user.username
     val admin = user.admin
     println("userDirect: " + username + " is admin: " + admin)
-
+    
     if(admin) Redirect(routes.Admin.dashboard).withSession("username" -> username)
     else Redirect(routes.Application.index).withSession("username" -> username).flashing(
-      "success" -> "You are now logged is as user")
+      "success" -> "You are now logged in as user")
+  }
+
+  /*
+  * Checks user role from request
+  */
+
+  def checkAdmin(request: RequestHeader) = {
+    val authUser = Auth.username(request).getOrElse(null)
+    val user:User = User.findByName(authUser).getOrElse(null)
+    user.admin match {
+      case true => println("useradmin continues")
+      case _ => {
+        println("user goes home ") 
+        Future.successful(Redirect("/error"))
+      }
+    }
   } 
-
-
 }  
 
 /**
@@ -84,11 +102,8 @@ trait Secured {
 
   def withAuth(f: => String => Request[AnyContent] => Result) = {
     Security.Authenticated(username, onUnauthorized) { user =>
-      //Authenticated 
       val u = User.findByName(user).getOrElse(null)
-      
-      if(u.admin) Action(request => f(user)(request))
-      else Action(request => f(user)(request))
+      Action(request => f(user)(request))
     }
   }
 
@@ -96,5 +111,19 @@ trait Secured {
     User.findByName(username).map { user =>
       f(user)(request)
     }.getOrElse(onUnauthorized(request))
+  }
+
+  def withAdmin(f: User => Request[AnyContent] => Result) = withAuth { username => implicit request =>
+    val optionUser = User.findByName(username)
+    val user = optionUser.getOrElse(null)
+
+    user.admin match {
+      case true => {
+        optionUser.map { user =>
+          f(user)(request)
+        }.getOrElse(onUnauthorized(request))
+      }
+      case _ => Results.Redirect(routes.Application.error("You are not authorized to view this page"))
+    }
   }
 }

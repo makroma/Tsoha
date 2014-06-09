@@ -23,4 +23,9 @@ object Application extends Controller with Secured{
     Ok(html.movies.list(Auth.username(request).getOrElse(null))("All")(movies)(genres))
   
   }
+  def error(message:String = "not defined") = Action { implicit request =>
+
+    Ok(html.error(message))
+
+  }
 }

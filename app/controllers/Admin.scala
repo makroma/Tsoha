@@ -16,11 +16,12 @@ import models._
 object Admin extends Controller with Secured{
 
   /*
-  Dashboard renderer @(user:String)(content: Html)(right: Html)(implicit flash: Flash)
+  Dashboard renderer @(user:String)(user:String)(content: Html)(right: Html)(implicit flash: Flash)
   uses "withAuth" action to authenticate user cookie
   */
 
-  def dashboard = withAuth { username => implicit request =>
+  def dashboard = withAdmin { user => implicit request =>
+
     val users = User.findAllSQL
     Ok(views.html.admin.dashboard(Auth.username(request).getOrElse(null))(null)(views.html.admin.users(users)))
   }
@@ -29,8 +30,8 @@ object Admin extends Controller with Secured{
   Renders userpage or return 404
   */  
 
-  def showUser(id: Int) = withAuth { username => implicit request =>
-    User.findById(id).map {user =>
+  def showUser(id: Int) = withAdmin { user => implicit request =>
+    User.findById(id).map { user =>
         Ok(views.html.admin.user(Auth.username(request).getOrElse(null))(user))
     }.getOrElse(NotFound)
   }
@@ -64,7 +65,7 @@ object Admin extends Controller with Secured{
   Find same user by name and redirect to userpage.
   */
 
-  def adduser = withAuth { username =>  implicit request =>
+  def adduser = withAdmin { user =>  implicit request =>
     print("addUser ")
     val newUserForm = userForm.bindFromRequest()
     newUserForm.fold(
@@ -82,17 +83,17 @@ object Admin extends Controller with Secured{
     )
   }
 
-  def newUser = withAuth { username => implicit request =>
+  def newUser = withAdmin { user => implicit request =>
     val users = User.findAll
     val form = 
-    if (flash.get("error").isDefined) {
-        userForm.bind(flash.data)
-    } else userForm
+      if (flash.get("error").isDefined) {
+          userForm.bind(flash.data)
+      } else userForm
 
     Ok(views.html.admin.addUser(Auth.username(request).getOrElse(null))(form)(views.html.admin.users(users)))
   }
 
-  def deleteUser(name: String) = Action {
+  def deleteUser(name: String) = withAdmin { user => implicit request =>
     User.delete(name)
     Redirect(routes.Admin.newUser)
   }
@@ -109,7 +110,7 @@ object Admin extends Controller with Secured{
     )(Genre.apply)(Genre.unapply)
   )
 
-  def addgenre = withAuth { username => implicit request =>
+  def addgenre = withAdmin { user => implicit request =>
     val newGenreForm = genreForm.bindFromRequest()
     newGenreForm.fold(
       hasErrors = { form =>
@@ -123,7 +124,7 @@ object Admin extends Controller with Secured{
     )
   }
 
-  def showGenres = withAuth { username => implicit request =>
+  def showGenres = withAdmin { user => implicit request =>
     val form = 
     if (flash.get("error").isDefined) {
         genreForm.bind(flash.data)
@@ -132,7 +133,7 @@ object Admin extends Controller with Secured{
     Ok(views.html.admin.editGenre(Auth.username(request).getOrElse(null))(form)(views.html.admin.genres(Genre.allSorted)))
   }
 
-  def deleteGenre(title: String) = Action {
+  def deleteGenre(title: String) = withAdmin { user => implicit request =>
     Genre.delete(title)
     Redirect(routes.Admin.showGenres)
   }
@@ -161,7 +162,7 @@ object Admin extends Controller with Secured{
 
 
 
-  def addmovie = Action { implicit request =>
+  def addmovie = withAdmin { user => implicit request =>
     val newMovieForm = movieForm.bindFromRequest()
     newMovieForm.fold(
 
@@ -180,18 +181,17 @@ object Admin extends Controller with Secured{
     )
   }
 
-  def showMovie = withAuth { username => implicit request =>
+  def showMovie = withAdmin { user => implicit request =>
     val form = 
-    if (flash.get("error").isDefined) {
-      movieForm.bind(flash.data)
-    }
-    else movieForm
+      if (flash.get("error").isDefined) {
+        movieForm.bind(flash.data)
+      } else movieForm
+    
     Ok(views.html.admin.addMovie(Auth.username(request).getOrElse(null))(form)(Genre.allSorted)(views.html.admin.movies(Movie.findAll)))
   }
 
-  def edit(id:Int)  = withAuth { username => implicit request =>
+  def edit(id:Int) = withAdmin { user => implicit request =>
 
     Ok(views.html.admin.editMovie(Auth.username(request).getOrElse(null))(Movie.findById(id).getOrElse(null))(Genre.allSorted)(views.html.admin.movies(Movie.findAll)))
-  
   }
 }
