@@ -16,11 +16,7 @@ object Application extends Controller with Secured{
   */
 
   def index = Action { implicit request =>
-    var movies = Movie.findAll
-    var genres = Genre.getGenresWithMovies
-
-    //@(movies: List[Movie])(genres: List[Genre])(navbar: Html)
-    Ok(html.movies.list(Auth.username(request).getOrElse(null))("All")(movies)(genres))
+   Redirect(routes.Movies.frontPage)
   
   }
   def error(message:String = "not defined") = Action { implicit request =>

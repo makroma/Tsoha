@@ -71,7 +71,7 @@ object Auth extends Controller with Secured{
     
     if(admin) Redirect(routes.Admin.dashboard).flashing(
       "success" -> "Welcome! You are now logged with adminstrator priviledges")
-    else Redirect(routes.Application.index).flashing(
+    else Redirect(routes.Movies.frontPage).flashing(
       "success" -> "Welcome! You are now logged in as a user")
   }
 }  
@@ -110,7 +110,7 @@ trait Secured {
           f(user)(request)
         }.getOrElse(onUnauthorized(request))
       }
-      case _ => Results.Redirect(routes.Application.index).flashing(
+      case _ => Results.Redirect(routes.Movies.frontPage).flashing(
       "error" -> "Sorry, You're Not Allowed to Do That ")
     }
   }

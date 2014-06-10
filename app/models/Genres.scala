@@ -17,7 +17,7 @@ object Genres{
 
     for(g<-genres) list += (Genre.findByGenre(g).getOrElse(null))
     println("add genre to movie: " )
-    
+
     list.foreach( g =>
       DB.withConnection { implicit connection =>
         SQL("""
@@ -47,7 +47,7 @@ object Genres{
         ).on('g -> genre).apply().head
       }
     }
-    if(count[Long]("c") < 1) true else false
+    count[Long]("c") < 1
   }
 
   /*
