@@ -17,8 +17,7 @@ object Genres{
 
     for(g<-genres) list += (Genre.findByGenre(g).getOrElse(null))
     println("add genre to movie: " )
-    list.foreach(println)
-
+    
     list.foreach( g =>
       DB.withConnection { implicit connection =>
         SQL("""

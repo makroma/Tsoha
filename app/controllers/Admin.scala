@@ -10,6 +10,7 @@ import play.api.mvc.{Action, Controller}
 
 import anorm._
 import anorm.SqlParser._
+import scala.collection.mutable.ArrayBuffer
 
 import models._
 
@@ -160,6 +161,13 @@ object Admin extends Controller with Secured{
     )(Movie.apply)(Movie.unapply)
   )
 
+  /**
+  * Add movie. Fold form. 
+  * In case of error, will iterate thrue form values and add them "selectedGenres" list. Which is then passed
+  * to view as constructor parameter.  
+  * If success, will add movie to db and attach genres to movie. Then redirect to addmovie page
+  * 
+  */
 
 
   def addmovie = withAdmin { user => implicit request =>
@@ -167,16 +175,39 @@ object Admin extends Controller with Secured{
     newMovieForm.fold(
 
       hasErrors = { form =>
+
+        val selectedGenre = ArrayBuffer[String]()
+        form.data.values.iterator.foreach( i => if(!i.isEmpty) selectedGenre += i )
+
         val flash = play.api.mvc.Flash(Map( "error" -> "Something went wrong"))
-        BadRequest(views.html.admin.addMovie((Auth.username(request).getOrElse(null)))(form)(Genre.allSorted)(views.html.admin.movies(Movie.findAll))(flash))},
+
+        BadRequest(
+          views.html.admin.addMovie(
+
+            /* Contructor params */
+            (Auth.username(request).getOrElse(null)))
+            (form)
+            (Genre.allSorted, selectedGenre.toList)
+            (views.html.admin.movies(Movie.findAll))
+            (flash)
+        )
+      },
 
       success = { movie =>
-        println(movie)
+
         Movie.addMovie(movie)
-        movie.genres.foreach(println)
         Genres.addGenresToMovie(movie.genres, Movie.getID(movie.title))
+
         val flash = play.api.mvc.Flash(Map( "success" -> "New movie added"))
-        Ok(views.html.admin.addMovie(Auth.username(request).getOrElse(null))(movieForm)(Genre.allSorted)(views.html.admin.movies(Movie.findAll))(flash))
+
+        Ok(views.html.admin.addMovie(
+          /* Contructor params */
+          Auth.username(request).getOrElse(null))
+          (movieForm)
+          (Genre.allSorted, null)
+          (views.html.admin.movies(Movie.findAll))
+          (flash)
+        )
       } 
     )
   }
@@ -186,8 +217,10 @@ object Admin extends Controller with Secured{
       if (flash.get("error").isDefined) {
         movieForm.bind(flash.data)
       } else movieForm
+
+      var selectedGenre = ArrayBuffer[String]()
     
-    Ok(views.html.admin.addMovie(Auth.username(request).getOrElse(null))(form)(Genre.allSorted)(views.html.admin.movies(Movie.findAll)))
+    Ok(views.html.admin.addMovie(Auth.username(request).getOrElse(null))(form)(Genre.allSorted, selectedGenre.toList)(views.html.admin.movies(Movie.findAll)))
   }
 
   def edit(id:Int) = withAdmin { user => implicit request =>

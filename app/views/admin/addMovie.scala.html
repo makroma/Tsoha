@@ -1,4 +1,4 @@
-@(user:String)(movieForm: Form[Movie])(genres:List[Genre])(RightHand: Html)(implicit flash: Flash)
+@(user:String)(movieForm: Form[Movie])(genres:List[Genre], selectedGenres:List[String])(RightHand: Html)(implicit flash: Flash)
 
 @import helper._
 @import models.Genre
@@ -48,7 +48,11 @@
                             <div class="input">
                                 <select multiple="multiple" id="genres" name="genres[]" class="form-control">
                                     @for(genre <- genres) {
-                                        <option value="@genre.title">@genre.title</option>
+                                        @if(selectedGenres!= null && selectedGenres.contains(genre.title)) {
+                                            <option value="@genre.title" selected="selected">@genre.title</option>
+                                        } else {
+                                            <option value="@genre.title" >@genre.title</option>
+                                        }
                                     }
                                 </select>
                                 <span class="help-inline"></span>
