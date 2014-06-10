@@ -3,7 +3,7 @@
 # ~~~~
 
 # Home page
-GET  /                              controllers.Application.index
+GET  /                              controllers.Movies.frontPage
 GET /logout                         controllers.Auth.logout
 GET /login                          controllers.Auth.login
 POST /login                         controllers.Auth.authenticate
