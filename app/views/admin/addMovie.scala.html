@@ -46,9 +46,9 @@
                     <div class="col-lg-10">
                         <div id="select_field" class="clearfix ">
                             <div class="input">
-                                <select multiple="" name="genres[]" id="genres" class="form-control">
-                                    @for(g <- genres) {
-                                        <option value="@g.title" name="@g.title" >@g.title</option> 
+                                <select multiple="multiple" id="genres" name="genres[]" class="form-control">
+                                    @for(genre <- genres) {
+                                        <option value="@genre.title">@genre.title</option>
                                     }
                                 </select>
                                 <span class="help-inline"></span>

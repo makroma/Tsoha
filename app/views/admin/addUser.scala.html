@@ -23,18 +23,23 @@
                             @helper.inputPassword(userForm("password.main"), 'class -> "form-control", '_error ->  
                             "Passwords did not match", '_label -> "", '_help -> "", 'placeholder -> "Password")
                         </div>
-                     </div>
-                     <div class="form-group">
+                    </div>
+                    <div class="form-group">
                         <label for="password" class="col-lg-2 control-label">Password</label>
                         <div class="col-lg-10">
                             @helper.inputPassword(userForm("password.confirm"), 'class -> "form-control", '_error ->
                             "Passwords did not match", '_label -> "", '_help -> "", 'placeholder -> "Password")
                         </div>
-                     </div>
-                     <div class="col-lg-10 col-lg-offset-2">
+                    </div>
+                    <div class="col-lg-10 col-lg-offset-2">
                         <br><br>
                         <input type="submit" class="btn primary" value='Add user'>
-                     </div>
+                    </div>
+                    <div class="col-lg-5">
+                        @userForm.globalError.map { error =>
+                            <p class="text-warning">@error.message</p>
+                        }
+                    </div>    
             </fieldset>
         </form> 
     </div>  

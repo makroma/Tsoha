@@ -65,10 +65,10 @@ object Userpage extends Controller with Secured{
 
     newUserForm.fold(
       hasErrors = { form =>
-        BadRequest(views.html.user.page(aUser, form)).flashing(
-          "error" -> "Something went wrong, maybe username is taken or passwords didnt match ")},
+        val flash = play.api.mvc.Flash(Map("error" -> "Something went wrong, maybe passwords did not match"))
+        BadRequest(views.html.user.page(aUser, form)(flash))},
       success = { update =>
-        User.updateNamePass(aUser, update.password) 
+        User.updateNamePass(aUser, update.password)
         Redirect(routes.Userpage.showUserPage(authUser)).flashing(
           "success" -> "Password change successfull!")
       } 

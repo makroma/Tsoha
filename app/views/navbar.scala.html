@@ -25,7 +25,7 @@
 
             @*get admin(t/f) not implemented yet*@
             
-            @if(user == "admin"){
+            @if(User.isAdmin(user)){
                 <li>    
                     <a href="@routes.Admin.dashboard" class="dashboard">Dashboard</a>
                 </li>

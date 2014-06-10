@@ -1,4 +1,4 @@
-@(user:String)(active:String)(movies: List[Movie])(genres: List[Genre])
+@(user:String)(active:String)(movies: List[Movie])(genres: List[Genre])(implicit flash: Flash)
 
 <!--opens main.html with contructor parameters (title)(content)(loginform)-->
 @import play.api.mvc.Action
@@ -27,4 +27,4 @@
         </a>    
     }
 
-}(null)
+}(flash)

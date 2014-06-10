@@ -72,13 +72,13 @@ object Admin extends Controller with Secured{
       hasErrors = { form =>
 
         //@(userForm: Form[Aspirant])(RightHand: Html)(user: User)(implicit flash: Flash)
-        BadRequest(views.html.admin.addUser(Auth.username(request).getOrElse(null))(form)(views.html.admin.users(User.findAll))).flashing(
-            "error" -> "Something went wrong, maybe username is taken or passwords didnt match ")},
+        val flash = play.api.mvc.Flash(Map("error" -> "Something went wrong, maybe passwords did not match"))
+        BadRequest(views.html.admin.addUser(Auth.username(request).getOrElse(null))(form)(views.html.admin.users(User.findAll))(flash))},
       success = { user =>
         println("success.")
         User.addUser(user.username, user.userpassword)
-        Ok(views.html.admin.addUser(Auth.username(request).getOrElse(null))(userForm)(views.html.admin.users(User.findAll))).flashing(
-            "success" -> "New user added")
+        val flash = play.api.mvc.Flash(Map("success" -> "New user added"))
+        Ok(views.html.admin.addUser(Auth.username(request).getOrElse(null))(userForm)(views.html.admin.users(User.findAll))(flash))
       } 
     )
   }
@@ -114,12 +114,12 @@ object Admin extends Controller with Secured{
     val newGenreForm = genreForm.bindFromRequest()
     newGenreForm.fold(
       hasErrors = { form =>
-        BadRequest(views.html.admin.editGenre(Auth.username(request).getOrElse(null))(form)(views.html.admin.genres(Genre.allSorted))).flashing(
-            "error" -> "Something went wrong, maybe name taken")},
+        val flash = play.api.mvc.Flash(Map("error" -> "Genre name is taken"))
+        BadRequest(views.html.admin.editGenre(Auth.username(request).getOrElse(null))(form)(views.html.admin.genres(Genre.allSorted))(flash))},
       success = { genre =>
         Genre.addGenre(genre.title)
-        Ok(views.html.admin.editGenre(Auth.username(request).getOrElse(null))(genreForm)(views.html.admin.genres(Genre.allSorted))).flashing(
-            "success" -> "New genre added")
+        val flash = play.api.mvc.Flash(Map("success" -> "New genre added"))
+        Ok(views.html.admin.editGenre(Auth.username(request).getOrElse(null))(genreForm)(views.html.admin.genres(Genre.allSorted))(flash))
       } 
     )
   }
@@ -154,7 +154,7 @@ object Admin extends Controller with Secured{
         "Not a unique name", Movie.findByName(_).isEmpty),
       "link" -> text,
       "coverimg" -> text,
-      "genres[]" -> list(text),
+      "genres" -> list(text),
       "plot" -> optional(text),
       "year" -> optional(number)
     )(Movie.apply)(Movie.unapply)
@@ -167,16 +167,16 @@ object Admin extends Controller with Secured{
     newMovieForm.fold(
 
       hasErrors = { form =>
-
-        BadRequest(views.html.admin.addMovie((Auth.username(request).getOrElse(null)))(form)(Genre.allSorted)(views.html.admin.movies(Movie.findAll))).flashing(
-            "error" -> "Something went wrong")},
+        val flash = play.api.mvc.Flash(Map( "error" -> "Something went wrong"))
+        BadRequest(views.html.admin.addMovie((Auth.username(request).getOrElse(null)))(form)(Genre.allSorted)(views.html.admin.movies(Movie.findAll))(flash))},
 
       success = { movie =>
+        println(movie)
         Movie.addMovie(movie)
         movie.genres.foreach(println)
         Genres.addGenresToMovie(movie.genres, Movie.getID(movie.title))
-        Ok(views.html.admin.addMovie(Auth.username(request).getOrElse(null))(movieForm)(Genre.allSorted)(views.html.admin.movies(Movie.findAll))).flashing(
-            "success" -> "New movie added")
+        val flash = play.api.mvc.Flash(Map( "success" -> "New movie added"))
+        Ok(views.html.admin.addMovie(Auth.username(request).getOrElse(null))(movieForm)(Genre.allSorted)(views.html.admin.movies(Movie.findAll))(flash))
       } 
     )
   }
@@ -191,7 +191,9 @@ object Admin extends Controller with Secured{
   }
 
   def edit(id:Int) = withAdmin { user => implicit request =>
-
-    Ok(views.html.admin.editMovie(Auth.username(request).getOrElse(null))(Movie.findById(id).getOrElse(null))(Genre.allSorted)(views.html.admin.movies(Movie.findAll)))
+    Ok(views.html.admin.editMovie(Auth.username(request).getOrElse(null))
+      (Movie.findById(id).getOrElse(null))
+      (Genre.allSorted)
+      (views.html.admin.movies(Movie.findAll)))
   }
 }

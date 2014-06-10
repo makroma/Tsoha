@@ -49,6 +49,14 @@ object User { //Data Access object - Companion
     }
   }
 
+  def isAdmin(name:String): Boolean = {
+    val u =
+      DB.withConnection { implicit connection =>
+          SQL("select * from users where username = {username};").on('username -> name).as(User.full.singleOpt)
+      }.getOrElse(null)
+    u.admin  
+  }
+
   def idByName(name:String): Int = {
     print("idByName..")
     val user:Pk[Int] = findByName(name).map { user => user.userid }.get

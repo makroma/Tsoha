@@ -24,9 +24,11 @@ object Auth extends Controller with Secured{
   val loginForm = Form(
     tuple(
       "username" -> text,
-      "password" -> text) verifying ("Invalid username or password", result => result match {
+      "password" -> text).verifying ("Invalid username or password", result => 
+        result match {
           case (username, password) => check(username, password)
-      })
+        }
+      )
   )
 
   def check(username: String, password: String): Boolean = {
@@ -67,26 +69,11 @@ object Auth extends Controller with Secured{
     val admin = user.admin
     println("userDirect: " + username + " is admin: " + admin)
     
-    if(admin) Redirect(routes.Admin.dashboard).withSession("username" -> username)
-    else Redirect(routes.Application.index).withSession("username" -> username).flashing(
-      "success" -> "You are now logged in as user")
+    if(admin) Redirect(routes.Admin.dashboard).flashing(
+      "success" -> "Welcome! You are now logged with adminstrator priviledges")
+    else Redirect(routes.Application.index).flashing(
+      "success" -> "Welcome! You are now logged in as a user")
   }
-
-  /*
-  * Checks user role from request
-  */
-
-  def checkAdmin(request: RequestHeader) = {
-    val authUser = Auth.username(request).getOrElse(null)
-    val user:User = User.findByName(authUser).getOrElse(null)
-    user.admin match {
-      case true => println("useradmin continues")
-      case _ => {
-        println("user goes home ") 
-        Future.successful(Redirect("/error"))
-      }
-    }
-  } 
 }  
 
 /**
@@ -123,7 +110,8 @@ trait Secured {
           f(user)(request)
         }.getOrElse(onUnauthorized(request))
       }
-      case _ => Results.Redirect(routes.Application.error("You are not authorized to view this page"))
+      case _ => Results.Redirect(routes.Application.index).flashing(
+      "error" -> "Sorry, You're Not Allowed to Do That ")
     }
   }
 }
