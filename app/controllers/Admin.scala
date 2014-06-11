@@ -225,17 +225,32 @@ object Admin extends Controller with Secured{
 
   /*
   * Edit movie functions
-  * "edit" for page Action 
+  * new form for update with no title verifying.
+  * "edit" for page Action generates filled form.
+  * updatemovie POST function on success send data to Movie.update function
   */
+
+  val movieUpdateForm: Form[Movie] = Form(
+
+    //maps form content
+    mapping(
+      "id" -> ignored(NotAssigned: anorm.Pk[Int]),
+      "title" -> text,
+      "link" -> optional(text),
+      "coverimg" -> optional(text),
+      "genres" -> list(text),
+      "plot" -> optional(text),
+      "year" -> optional(number)
+    )(Movie.apply)(Movie.unapply)
+  )
 
   def edit(id:Int) = withAdmin { user => implicit request =>
 
     val movie = Movie.findById(id).getOrElse(null)
     /*Attach genres list to the Movie*/
     movie.genres = Genres.getMovieGenres(movie.title)
+    val form:Form[Movie] = movieUpdateForm.fill(movie)
 
-    val form:Form[Movie] = movieForm.fill(movie)
-    
     Ok(views.html.admin.editMovie(
       /*Constructor params*/
       Auth.username(request).getOrElse(null), form, movie)
@@ -243,44 +258,37 @@ object Admin extends Controller with Secured{
       (views.html.admin.movies(Movie.findAll)))
   }
 
-  def updateMovie = withAdmin { user => implicit request =>
-    val newMovieForm = movieForm.bindFromRequest()
+  def updateMovie(id:Int) = withAdmin { user => implicit request =>
+    val newMovieForm = movieUpdateForm.bindFromRequest()
     newMovieForm.fold(
-
       hasErrors = { form =>
-
-        val selectedGenre = ArrayBuffer[String]()
-        form.data.values.iterator.foreach( i => if(!i.isEmpty) selectedGenre += i )
+        val movie = Movie.findById(id).getOrElse(null)
+        /*Attach genres list to the Movie*/
+        movie.genres = Genres.getMovieGenres(movie.title)
 
         val flash = play.api.mvc.Flash(Map( "error" -> "Something went wrong"))
 
         BadRequest(
-          views.html.admin.addMovie(
-
-            /* Contructor params */
-            (Auth.username(request).getOrElse(null)))
-            (form)
-            (Genre.allSorted, selectedGenre.toList)
-            (views.html.admin.movies(Movie.findAll))
-            (flash)
-        )
-      },
-
-      success = { movie =>
-
-        Movie.addMovie(movie)
-        Genres.addGenresToMovie(movie.genres, Movie.getID(movie.title))
-
-        val flash = play.api.mvc.Flash(Map( "success" -> "Movie info updated!"))
-
-        Ok(views.html.admin.addMovie(
-          /* Contructor params */
-          Auth.username(request).getOrElse(null))
-          (movieForm)
-          (Genre.allSorted, null)
+          views.html.admin.editMovie(
+          /*Constructor params*/
+          Auth.username(request).getOrElse(null), form, movie)
+          (Genre.allSorted)
           (views.html.admin.movies(Movie.findAll))
           (flash)
         )
+      },
+      success = { amovie =>
+        Movie.update(amovie)
+        val id = Movie.getID(amovie.title)
+
+        Genres.deleteMovieGenre(id.get)
+        Genres.addGenresToMovie(amovie.genres, id)
+
+        val flash = play.api.mvc.Flash(Map( "success" -> "Movie info updated!"))
+
+          Redirect(routes.Admin.edit(Movie.getID(amovie.title).get)).flashing(
+             "success" -> "Movie info updated!")
+          
       } 
     )
   }

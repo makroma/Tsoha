@@ -16,7 +16,7 @@ import models._
 object Userpage extends Controller with Secured{
 
   /*
-    Renders moviepage or return 404
+  * Renders moviepage or return 404
   */  
 
   def showUserPage(usern: String) = withUser{ user => implicit request =>
@@ -54,7 +54,7 @@ object Userpage extends Controller with Secured{
   )
 
   /*
-  * http post function. 
+  * http POST function. 
   */
 
   def editUser = withAuth { username =>  implicit request =>
@@ -70,7 +70,7 @@ object Userpage extends Controller with Secured{
       success = { update =>
         User.updateNamePass(aUser, update.password)
         Redirect(routes.Userpage.showUserPage(authUser)).flashing(
-          "success" -> "Password change successfull!")
+          "success" -> "Password change successful!")
       } 
     )
   }

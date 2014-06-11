@@ -22,7 +22,7 @@ object Genres{
       DB.withConnection { implicit connection =>
         SQL("""
           Insert into genres_has_movies(genres_genreid, movies_movieid)
-          values({gid}, {mid});
+          values({gid}, {mid}) ;
           """
         ).on('gid ->g.id, 'mid ->movieId).executeUpdate() 
       }

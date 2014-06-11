@@ -2,15 +2,15 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-# Home page
-GET  /                              controllers.Movies.frontPage
+
+# Security
 GET /logout                         controllers.Auth.logout
 GET /login                          controllers.Auth.login
 POST /login                         controllers.Auth.authenticate
 GET /direct                         controllers.Auth.userDirect
 
 # Movies
-# GET /Movies                       controllers.Movies.list
+GET  /                              controllers.Movies.frontPage
 GET /m/:id                          controllers.Movies.showMovie(id:Int)
 GET /f/:genre                       controllers.Movies.filterByGenre(genre:String)
 
@@ -30,19 +30,14 @@ GET  /Admin/genres                  controllers.Admin.showGenres
 POST /Admin/genres                  controllers.Admin.addgenre
 POST /Admin/deletegenre             controllers.Admin.deleteGenre(title:String)
 
-# Admin movies
+# Admin ADD movies
 GET /Admin/movies                   controllers.Admin.showMovie
 POST /Admin/addmovie                controllers.Admin.addmovie
 POST /Admin/movies/deletemovie		controllers.Admin.deleteMovie(movie: String)
 
+# Admin EDIT movie
 GET /Admin/movies/:id               controllers.Admin.edit(id:Int)
-
-# Map static resources from the /public folder to the /assets URL path
-GET /assets/*file                   controllers.Assets.at(path="/public", file)
-
-
-# Route show page to static html
-GET /esittelysivu                   controllers.Assets.at(path="/public", file="html/esittelysivu.html")
+POST /Admin/movie/update 	      	controllers.Admin.updateMovie(id:Int)
 
 # User page
 GET /u/:username                    controllers.Userpage.showUserPage(username: String)
@@ -51,3 +46,10 @@ POST /u/delete                      controllers.Userpage.deleteUser(name:String)
 
 # Error page
 GET /error                          controllers.Application.error(message:String)
+
+# Map static resources from the /public folder to the /assets URL path
+GET /assets/*file                   controllers.Assets.at(path="/public", file)
+
+# Route show page to static html
+GET /esittelysivu                   controllers.Assets.at(path="/public", file="html/esittelysivu.html")
+

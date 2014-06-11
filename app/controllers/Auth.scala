@@ -100,6 +100,10 @@ trait Secured {
     }.getOrElse(onUnauthorized(request))
   }
 
+  /*
+  * Admin check. if not admin rights, will direct to fronpage with flashing
+  */
+
   def withAdmin(f: User => Request[AnyContent] => Result) = withAuth { username => implicit request =>
     val optionUser = User.findByName(username)
     val user = optionUser.getOrElse(null)

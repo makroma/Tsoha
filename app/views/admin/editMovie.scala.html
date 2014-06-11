@@ -7,31 +7,17 @@
 
 @admin.dashboard(user){
     <h1>Edit movie: @movie.title</h1>
-    @helper.form(routes.Admin.deleteMovie(movie.title)) {
-        <div class="well"> 
-            <div class="form-group">
-                <label for="delete" class="col-lg-4 control-label">Delete movie: "@movie.title" <br>(Delete can not be reversed.)</label>
-            
-                <div class="col-lg-8">
-                    <input type="submit" value="Delete" class="btn btn-danger" id="Delete">
-                </div> 
-            </div>  
-        </div>
-    }
-    @helper.form(action = routes.Admin.edit(movie.id.get)) {
+    @helper.form(action = routes.Admin.updateMovie(movie.id.get)) {
     <div class="well bs-component">
         <form class="form-horizontal">
             <fieldset>
                 <legend>Add a Movie</legend>
 
+                <input type="hidden" name="id" value="@movie.id" />
+                <input type="hidden" name="title" value="@movie.title" />
+
                 <!--Movie title group-->
-                <div class="form-group">
-                    <label for="title" class="col-lg-2 control-label">Title</label>
-                    <div class="col-lg-10">
-                        @helper.inputText(editForm("title"), 'class -> "form-control",
-                        '_label -> "", '_help -> "", 'placeholder -> "Title")
-                    </div>
-                </div>
+
 
                 <!--Links-->
 
@@ -98,12 +84,22 @@
 
                 <div class="form-group">
                     <div class="col-lg-10 col-lg-offset-2">
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
                     </div>
                 </div>
             </fieldset>
         </form>
     </div>
+    }
+ 	@helper.form(routes.Admin.deleteMovie(movie.title)) {
+        <div class="well"> 
+            <div class="form-group">
+                <label for="delete" class="col-lg-4 control-label">Delete movie<br>(Can not be undone)</label>
+            
+                <div class="col-lg-8">
+                    <input type="submit" value="Delete" class="btn btn-danger" id="Delete">
+                </div> 
+            </div>  
+        </div>
     }    
-	
 }(RightHand)(flash)

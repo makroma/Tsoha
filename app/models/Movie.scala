@@ -8,16 +8,19 @@ import anorm.SqlParser._
 import java.util.{Date}
 
 
-case class Movie(id: anorm.Pk[Int] = NotAssigned, title: String, 
+case class Movie(var id: anorm.Pk[Int] = NotAssigned, title: String, 
           link:Option[String], coverImg:Option[String], var genres:List[String], 
-          plot:Option[String], year:Option[Int]
-          ) 
+          plot:Option[String], year:Option[Int])
+
+case class MovieUpdate(link:Option[String], coverImg:Option[String], 
+          var genres:List[String], plot:Option[String], year:Option[Int])
+        
 
 object Movie{
 
   /*
   Select * from genres_has_movies where movieid ={movieid};
-  */
+  */      
 
   val simple = {
       get[Pk[Int]]("movieid") ~
@@ -106,15 +109,27 @@ object Movie{
   * Delete movie function also deletes genre attachments from genres_has_movies
   */
 
-  def delete(movie: String) {
-
+  def delete(movie: String) = {
+    /*Delete attached genre*/
     Genres.deleteMovieGenre(getID(movie).get)
-
     DB.withConnection { implicit c =>
       SQL("delete from movies where movietitle = {m}").on(
           'm -> movie
       ).executeUpdate()
     }
   }
-
+  def update(movie:Movie) = {
+     DB.withConnection { implicit connection =>
+      SQL(
+        """
+        update movies
+        set year = {y},
+        plot = {p},
+        link = {l},
+        coverimg = {c}
+        where movietitle = {t};
+        """
+        ).on('y -> movie.year, 'p -> movie.plot, 'l -> movie.link, 'c -> movie.coverImg, 't -> movie.title).executeUpdate()
+    }
+  }
 } 

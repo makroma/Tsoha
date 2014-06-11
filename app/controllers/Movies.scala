@@ -36,7 +36,7 @@ object Movies extends Controller {
   def showMovie(id: Int) = Action { implicit request =>
     
     Movie.findById(id).map { movie =>
-        Ok(views.html.movies.movie(Auth.username(request).getOrElse(null))(movie))
+      Ok(views.html.movies.movie(Auth.username(request).getOrElse(null))(movie))
     }.getOrElse(NotFound)
   }
 }
