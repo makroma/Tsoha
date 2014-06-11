@@ -33,6 +33,7 @@ POST /Admin/deletegenre             controllers.Admin.deleteGenre(title:String)
 # Admin movies
 GET /Admin/movies                   controllers.Admin.showMovie
 POST /Admin/addmovie                controllers.Admin.addmovie
+POST /Admin/movies/deletemovie		controllers.Admin.deleteMovie(movie: String)
 
 GET /Admin/movies/:id               controllers.Admin.edit(id:Int)
 

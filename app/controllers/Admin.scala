@@ -229,4 +229,10 @@ object Admin extends Controller with Secured{
       (Genre.allSorted)
       (views.html.admin.movies(Movie.findAll)))
   }
+
+  def deleteMovie(movie: String) = withAdmin { user => implicit request =>
+    Movie.delete(movie)
+    Redirect(routes.Admin.showMovie).flashing(
+      "success" -> "Movie deleted!")
+  }
 }

@@ -65,4 +65,12 @@ object Genres{
       ).on('m -> movie).as(str("genrename") *)
     }
   }
+
+  def deleteMovieGenre(movieid: Int) = {
+    DB.withConnection { implicit c =>
+      SQL("delete from genres_has_movies where movies_movieid = {id}").on(
+          'id -> movieid
+      ).executeUpdate()
+    }
+  }
 }

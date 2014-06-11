@@ -101,4 +101,20 @@ object Movie{
       ).on('m -> movie).as(str("date").singleOpt)
     }
   }
+
+  /*
+  * Delete movie function also deletes genre attachments from genres_has_movies
+  */
+
+  def delete(movie: String) {
+
+    Genres.deleteMovieGenre(getID(movie).get)
+
+    DB.withConnection { implicit c =>
+      SQL("delete from movies where movietitle = {m}").on(
+          'm -> movie
+      ).executeUpdate()
+    }
+  }
+
 } 

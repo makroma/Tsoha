@@ -7,5 +7,16 @@
 
 @admin.dashboard(user){
     <h1>Edit movie: @movie.title</h1>
+    @helper.form(routes.Admin.deleteMovie(movie.title)) {
+        <div class="well"> 
+            <div class="form-group">
+                <label for="delete" class="col-lg-4 control-label">Delete "@movie.title" Movie</label>
+            
+                <div class="col-lg-8">
+                    <input type="submit" value="Delete" class="btn btn-danger" id="Delete">
+                </div> 
+            </div>  
+        </div>
+    }    
 	
 }(RightHand)(flash)
