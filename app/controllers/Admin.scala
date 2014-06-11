@@ -153,8 +153,8 @@ object Admin extends Controller with Secured{
       "id" -> ignored(NotAssigned: anorm.Pk[Int]),
       "title" -> nonEmptyText.verifying(
         "Not a unique name", Movie.findByName(_).isEmpty),
-      "link" -> text,
-      "coverimg" -> text,
+      "link" -> optional(text),
+      "coverimg" -> optional(text),
       "genres" -> list(text),
       "plot" -> optional(text),
       "year" -> optional(number)
@@ -223,11 +223,66 @@ object Admin extends Controller with Secured{
     Ok(views.html.admin.addMovie(Auth.username(request).getOrElse(null))(form)(Genre.allSorted, selectedGenre.toList)(views.html.admin.movies(Movie.findAll)))
   }
 
+  /*
+  * Edit movie functions
+  * "edit" for page Action 
+  */
+
   def edit(id:Int) = withAdmin { user => implicit request =>
-    Ok(views.html.admin.editMovie(Auth.username(request).getOrElse(null))
-      (Movie.findById(id).getOrElse(null))
+
+    val movie = Movie.findById(id).getOrElse(null)
+    /*Attach genres list to the Movie*/
+    movie.genres = Genres.getMovieGenres(movie.title)
+
+    val form:Form[Movie] = movieForm.fill(movie)
+    
+    Ok(views.html.admin.editMovie(
+      /*Constructor params*/
+      Auth.username(request).getOrElse(null), form, movie)
       (Genre.allSorted)
       (views.html.admin.movies(Movie.findAll)))
+  }
+
+  def updateMovie = withAdmin { user => implicit request =>
+    val newMovieForm = movieForm.bindFromRequest()
+    newMovieForm.fold(
+
+      hasErrors = { form =>
+
+        val selectedGenre = ArrayBuffer[String]()
+        form.data.values.iterator.foreach( i => if(!i.isEmpty) selectedGenre += i )
+
+        val flash = play.api.mvc.Flash(Map( "error" -> "Something went wrong"))
+
+        BadRequest(
+          views.html.admin.addMovie(
+
+            /* Contructor params */
+            (Auth.username(request).getOrElse(null)))
+            (form)
+            (Genre.allSorted, selectedGenre.toList)
+            (views.html.admin.movies(Movie.findAll))
+            (flash)
+        )
+      },
+
+      success = { movie =>
+
+        Movie.addMovie(movie)
+        Genres.addGenresToMovie(movie.genres, Movie.getID(movie.title))
+
+        val flash = play.api.mvc.Flash(Map( "success" -> "Movie info updated!"))
+
+        Ok(views.html.admin.addMovie(
+          /* Contructor params */
+          Auth.username(request).getOrElse(null))
+          (movieForm)
+          (Genre.allSorted, null)
+          (views.html.admin.movies(Movie.findAll))
+          (flash)
+        )
+      } 
+    )
   }
 
   def deleteMovie(movie: String) = withAdmin { user => implicit request =>

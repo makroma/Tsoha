@@ -9,7 +9,7 @@ import java.util.{Date}
 
 
 case class Movie(id: anorm.Pk[Int] = NotAssigned, title: String, 
-          link:String, coverImg:String, genres:List[String], 
+          link:Option[String], coverImg:Option[String], var genres:List[String], 
           plot:Option[String], year:Option[Int]
           ) 
 
@@ -22,8 +22,8 @@ object Movie{
   val simple = {
       get[Pk[Int]]("movieid") ~
       get[String]("movietitle") ~
-      get[String]("link") ~
-      get[String]("coverimg") ~ 
+      get[Option[String]]("link") ~
+      get[Option[String]]("coverimg") ~ 
       get[Option[String]]("plot") ~
       get[Option[Int]]("year")map {
         case id~title~link~coverImg~plot~year => Movie(id, title, link, coverImg, null, plot, year)

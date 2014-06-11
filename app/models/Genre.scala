@@ -26,10 +26,6 @@ object Genre{
     } 
   }
 
-  /*
-  TODO: do we need to delete instance also from movies_has_genres!
-  */
-
   def delete(title: String) {
     DB.withConnection { implicit c =>
       SQL("delete from genres where genrename = {title}").on(
@@ -61,8 +57,8 @@ object Genre{
   def getGenresWithMovies(): List[Genre] = {
     DB.withConnection { implicit connection =>
       SQL("""
-        select * from genres g, genres_has_movies gm 
-        where g.genreid = gm.genres_genreid and genres_genreid is not null;
+        select DISTINCT g.genreid, g.genrename from genres g, genres_has_movies gm 
+        where g.genreid = gm.genres_genreid and gm.genres_genreid is not null;
         """
       ).as(simple *)
     }
