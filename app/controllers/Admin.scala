@@ -53,7 +53,7 @@ object Admin extends Controller with Secured{
           ).transform(
             { case (main, confirm) => main },
             ( main: String) => ("", "")
-        )
+          )
     )(Aspirant.apply)(Aspirant.unapply)
   )
 
@@ -70,7 +70,6 @@ object Admin extends Controller with Secured{
     val newUserForm = userForm.bindFromRequest()
     newUserForm.fold(
       hasErrors = { form =>
-
         val flash = play.api.mvc.Flash(Map("error" -> "Something went wrong, maybe passwords did not match"))
         BadRequest(views.html.admin.addUser(Auth.username(request).getOrElse(null))(form)(views.html.admin.users(User.findAll))(flash))},
 
@@ -287,7 +286,6 @@ object Admin extends Controller with Secured{
 
           Redirect(routes.Admin.edit(Movie.getID(amovie.title).get)).flashing(
              "success" -> "Movie info updated!")
-          
       } 
     )
   }

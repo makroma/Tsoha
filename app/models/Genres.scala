@@ -5,18 +5,13 @@ import play.api.Play.current
 import anorm._
 import anorm.SqlParser._
 
-import scala.collection.mutable.ArrayBuffer
-
 case class Genres(genres:List[Genre])
 
 object Genres{
 
   def addGenresToMovie(genres:List[String], movieId:anorm.Pk[Int]) = {
 
-    val list = ArrayBuffer[Genre]()
-
-    for(g<-genres) list += (Genre.findByGenre(g).getOrElse(null))
-    println("add genre to movie: " )
+    val list = for(g<-genres) yield Genre.findByGenre(g).getOrElse(null)
 
     list.foreach( g =>
       DB.withConnection { implicit connection =>

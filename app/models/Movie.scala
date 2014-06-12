@@ -112,6 +112,7 @@ object Movie{
   def delete(movie: String) = {
     /*Delete attached genre*/
     Genres.deleteMovieGenre(getID(movie).get)
+
     DB.withConnection { implicit c =>
       SQL("delete from movies where movietitle = {m}").on(
           'm -> movie
@@ -129,7 +130,7 @@ object Movie{
         coverimg = {c}
         where movietitle = {t};
         """
-        ).on('y -> movie.year, 'p -> movie.plot, 'l -> movie.link, 'c -> movie.coverImg, 't -> movie.title).executeUpdate()
+      ).on('y -> movie.year, 'p -> movie.plot, 'l -> movie.link, 'c -> movie.coverImg, 't -> movie.title).executeUpdate()
     }
   }
 } 

@@ -12,7 +12,6 @@ case class User(userid: anorm.Pk[Int] = NotAssigned, username: String, userpassw
 object User { //Data Access object - Companion
 
 
-  //Parse SQL with Anorm.parser
   val simple = {
     get[Pk[Int]]("userid") ~
     get[String]("username") ~
@@ -20,6 +19,7 @@ object User { //Data Access object - Companion
       case id~name~admin => User(id, name, null, admin)
     }
   }
+
   val full = {
     get[Pk[Int]]("userid") ~
     get[String]("username") ~
@@ -36,57 +36,49 @@ object User { //Data Access object - Companion
   }
 
   def findById(id:Int): Option[User] = {
-    println("findById..")
     DB.withConnection { implicit connection =>
       SQL("select * from users where userid = {id};").on('id -> id).as(User.full.singleOpt)
     }
   }
 
-
   def findByName(name:String): Option[User] = {
     DB.withConnection { implicit connection =>
-        SQL("select * from users where username = {username};").on('username -> name).as(User.full.singleOpt)
+      SQL("select * from users where username = {username};").on('username -> name).as(User.full.singleOpt)
     }
   }
 
   def isAdmin(name:String): Boolean = {
-    val u =
+    val u:Boolean =
       DB.withConnection { implicit connection =>
-          SQL("select * from users where username = {username};").on('username -> name).as(User.full.singleOpt)
-      }.getOrElse(null)
-    u.admin  
+          SQL("select admin as a from users where username = {username};").on('username -> name).as(bool("a").singleOpt)
+      }.getOrElse(false)
+    return u
   }
 
   def idByName(name:String): Int = {
-    print("idByName..")
-    val user:Pk[Int] = findByName(name).map { user => user.userid }.get
-    return user.get
+    val userid:Pk[Int] = findByName(name).map { user => user.userid }.get
+    return userid.get
   }
 
   def findAll = findAllSQL.toList.sortWith(comp)
 
   def comp(e1: User, e2: User) = (e1.username compareToIgnoreCase e2.username) < 0
 
-
   def checkUserPassword(username: String, password: String):Boolean = {
-    print("checkUserPassword: ")
     var user:User = findByName(username).getOrElse(null)
-    if(user!=null && user.userpassword == password && user.username == username) {
-      println("userpassword mach")  
-      true
-    } 
-    else {
-      println("not maching")
-      false
-    } 
+    if(user!=null && user.userpassword == password && user.username == username) true
+    else false
   }
 
-  def addUser(username: String, password: String):Boolean ={
-    println("model.User.addUser(" + username + ", " + password +")")
+  def addUser(username: String, password: String) = {
     DB.withConnection { implicit connection =>
-      SQL("Insert into users(username, userpassword, admin) values({user}, {pssw}, false);").on('user ->username, 'pssw ->password).executeUpdate() 
+      SQL(
+        """
+        insert into users(username, userpassword, admin) 
+        values({user}, {pssw}, false);
+        """
+        ).on('user ->username, 'pssw ->password).executeUpdate() 
     } 
-    true  
   }
 
   def delete(name: String) {
