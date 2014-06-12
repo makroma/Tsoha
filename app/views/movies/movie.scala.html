@@ -5,7 +5,7 @@
 <!--opens main.html with contructor parameters (title)(content)(loginform)
 - - where html shown here is three column layout and "null" in the edn stands for login form-->
 @main(user, "Movie"){
-    <!--Left hand column-->
+
     <div class="col-md-4">
         <div class="videoscreen">
             <video id="video" class="video-js vjs-default-skin" controls
@@ -16,8 +16,6 @@
             </video>
         </div>
     </div>
-
-    <!--Right hand column-->
     <div class="col-md-8">
         <h1>@mo.title </h1>
         <div class="infoscreen">
@@ -39,7 +37,5 @@
         <p>@mo.plot</p>
         </div>
     </div>  
-            
-        
-    
+
 }(flash)

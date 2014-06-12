@@ -67,16 +67,14 @@ object Admin extends Controller with Secured{
   */
 
   def adduser = withAdmin { user =>  implicit request =>
-    print("addUser ")
     val newUserForm = userForm.bindFromRequest()
     newUserForm.fold(
       hasErrors = { form =>
 
-        //@(userForm: Form[Aspirant])(RightHand: Html)(user: User)(implicit flash: Flash)
         val flash = play.api.mvc.Flash(Map("error" -> "Something went wrong, maybe passwords did not match"))
         BadRequest(views.html.admin.addUser(Auth.username(request).getOrElse(null))(form)(views.html.admin.users(User.findAll))(flash))},
+
       success = { user =>
-        println("success.")
         User.addUser(user.username, user.userpassword)
         val flash = play.api.mvc.Flash(Map("success" -> "New user added"))
         Ok(views.html.admin.addUser(Auth.username(request).getOrElse(null))(userForm)(views.html.admin.users(User.findAll))(flash))
@@ -136,7 +134,8 @@ object Admin extends Controller with Secured{
 
   def deleteGenre(title: String) = withAdmin { user => implicit request =>
     Genre.delete(title)
-    Redirect(routes.Admin.showGenres)
+    Redirect(routes.Admin.showGenres).flashing(
+             "success" -> "Genre deleted!")
   }
 
   /*
