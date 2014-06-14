@@ -11,7 +11,7 @@ object Genres{
 
   def addGenresToMovie(genres:List[String], movieId:anorm.Pk[Int]) = {
 
-    val list = for(g<-genres) yield Genre.findByGenre(g).getOrElse(null)
+    val list = for(g<-genres) yield Genre.findByGenre(g).get
 
     list.foreach( g =>
       DB.withConnection { implicit connection =>
@@ -33,16 +33,17 @@ object Genres{
 
     val count = {
       DB.withConnection { implicit connection =>
-        SQL("""
+        SQL(
+          """
           select count(*) as c from genres_has_movies
           where genres_genreid = (
             select genreid from genres where genrename = {g}
-            );
+          );
           """
         ).on('g -> genre).apply().head
       }
     }
-    count[Long]("c") < 1
+    count[Long]("c") < 1 //if count "c" < 1 return true
   }
 
   /*
@@ -63,9 +64,8 @@ object Genres{
 
   def deleteMovieGenre(movieid: Int) = {
     DB.withConnection { implicit c =>
-      SQL("delete from genres_has_movies where movies_movieid = {id}").on(
-          'id -> movieid
-      ).executeUpdate()
+      SQL("delete from genres_has_movies where movies_movieid = {id}"
+        ).on('id -> movieid).executeUpdate()
     }
   }
 }

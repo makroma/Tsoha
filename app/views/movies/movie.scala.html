@@ -1,4 +1,4 @@
-@(user:String)(mo:Movie)(implicit flash: Flash)
+@(user:String, mo:Movie, grade:Double)(implicit flash: Flash)
 
 @import models.Genres
 
@@ -20,6 +20,12 @@
         <h1>@mo.title </h1>
         <div class="infoscreen">
         <p>
+            @* Commented out grading system
+            <p class="text-muted">
+                @if(grade > 0.0) { Ratings: @grade/10 } else { Ratings: not rated yet}<br>
+                @if(user!=null) {Give you rating:&nbsp;&nbsp; @for(i <- 1 to 10) {<a href="#"><span class="glyphicon glyphicon-star-empty"></span></a>&nbsp;}}
+            </p>
+            *@
 
             @if(mo.year!= None){@mo.year &nbsp;&nbsp;-&nbsp;&nbsp;}
 

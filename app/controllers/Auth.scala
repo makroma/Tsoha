@@ -78,7 +78,7 @@ object Auth extends Controller with Secured{
 
 /**
  * Provide security features
- * http://www.playframework.com/documentation/2.0.1/ScalaSecurity
+ * With scala trait extend
  */
 
 trait Secured {
@@ -115,7 +115,7 @@ trait Secured {
         }.getOrElse(onUnauthorized(request))
       }
       case _ => Results.Redirect(routes.Movies.frontPage).flashing(
-      "error" -> "Sorry, You're Not Allowed to Do That ")
+      "error" -> "Sorry, I´m not sure are you allowed to do that!")
     }
   }
 }

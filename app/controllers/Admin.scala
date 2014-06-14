@@ -10,7 +10,6 @@ import play.api.mvc.{Action, Controller}
 
 import anorm._
 import anorm.SqlParser._
-import scala.collection.mutable.ArrayBuffer
 
 import models._
 
@@ -174,9 +173,7 @@ object Admin extends Controller with Secured{
 
       hasErrors = { form =>
 
-        val selectedGenre = ArrayBuffer[String]()
-        form.data.values.iterator.foreach( i => if(!i.isEmpty) selectedGenre += i )
-
+        val selectedGenres = for(g <- form.data.values; if(!g.isEmpty)) yield g
         val flash = play.api.mvc.Flash(Map( "error" -> "Something went wrong"))
 
         BadRequest(
@@ -185,7 +182,7 @@ object Admin extends Controller with Secured{
             /* Contructor params */
             (Auth.username(request).getOrElse(null)))
             (form)
-            (Genre.allSorted, selectedGenre.toList)
+            (Genre.allSorted, selectedGenres.toList)
             (views.html.admin.movies(Movie.findAll))
             (flash)
         )
@@ -216,7 +213,7 @@ object Admin extends Controller with Secured{
         movieForm.bind(flash.data)
       } else movieForm
 
-      var selectedGenre = ArrayBuffer[String]()
+    var selectedGenre = List[String]()
     
     Ok(views.html.admin.addMovie(Auth.username(request).getOrElse(null))(form)(Genre.allSorted, selectedGenre.toList)(views.html.admin.movies(Movie.findAll)))
   }
@@ -244,7 +241,7 @@ object Admin extends Controller with Secured{
 
   def edit(id:Int) = withAdmin { user => implicit request =>
 
-    val movie = Movie.findById(id).getOrElse(null)
+    val movie = Movie.findById(id).get
     /*Attach genres list to the Movie*/
     movie.genres = Genres.getMovieGenres(movie.title)
     val form:Form[Movie] = movieUpdateForm.fill(movie)
@@ -260,7 +257,7 @@ object Admin extends Controller with Secured{
     val newMovieForm = movieUpdateForm.bindFromRequest()
     newMovieForm.fold(
       hasErrors = { form =>
-        val movie = Movie.findById(id).getOrElse(null)
+        val movie = Movie.findById(id).get
         /*Attach genres list to the Movie*/
         movie.genres = Genres.getMovieGenres(movie.title)
 
@@ -283,9 +280,7 @@ object Admin extends Controller with Secured{
         Genres.addGenresToMovie(amovie.genres, id)
 
         val flash = play.api.mvc.Flash(Map( "success" -> "Movie info updated!"))
-
-          Redirect(routes.Admin.edit(Movie.getID(amovie.title).get)).flashing(
-             "success" -> "Movie info updated!")
+        Redirect(routes.Admin.edit(Movie.getID(amovie.title).get)).flashing("success" -> "Movie info updated!")
       } 
     )
   }

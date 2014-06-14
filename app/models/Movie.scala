@@ -34,9 +34,9 @@ object Movie{
   }
 
   def findAllSQL(): List[Movie] = {
-      DB.withConnection { implicit connection =>
-        SQL("select * from movies;").as(simple *)
-      }
+    DB.withConnection { implicit connection =>
+      SQL("select * from movies;").as(simple *)
+    }
   }
 
   def findByName(title:String): List[Movie] = {
@@ -57,9 +57,7 @@ object Movie{
 
   def getID(title:String):anorm.Pk[Int] = {
     DB.withConnection { implicit connection =>
-      val movie = SQL("select * from movies where movietitle = {title};").on('title -> title).as(simple.singleOpt)
-      val res:anorm.Pk[Int] = movie.map { m => m.id }.getOrElse(NotAssigned)
-      return res
+      SQL("select * from movies where movietitle = {title};").on('title -> title).as(simple.singleOpt).get.id
     }
   }
    
@@ -83,7 +81,8 @@ object Movie{
 
   def filterByGenre(genre: String): List[Movie] = {
     DB.withConnection { implicit connection =>
-      SQL("""
+      SQL(
+        """
         select * from movies m, genres_has_movies gm, genres g
         where m.movieid = gm.movies_movieid and gm.genres_genreid = g.genreid and
         g.genrename = {g};
@@ -114,11 +113,10 @@ object Movie{
     Genres.deleteMovieGenre(getID(movie).get)
 
     DB.withConnection { implicit c =>
-      SQL("delete from movies where movietitle = {m}").on(
-          'm -> movie
-      ).executeUpdate()
+      SQL("delete from movies where movietitle = {m}").on('m -> movie).executeUpdate()
     }
   }
+
   def update(movie:Movie) = {
      DB.withConnection { implicit connection =>
       SQL(

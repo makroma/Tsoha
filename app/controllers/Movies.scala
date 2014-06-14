@@ -3,6 +3,7 @@ package controllers
 import play.api.mvc.{Action, Controller}
 import models.Movie
 import models.Genre
+import models.Grade
 import views._
 
 object Movies extends Controller {
@@ -36,7 +37,7 @@ object Movies extends Controller {
   def showMovie(id: Int) = Action { implicit request =>
     
     Movie.findById(id).map { movie =>
-      Ok(views.html.movies.movie(Auth.username(request).getOrElse(null))(movie))
+      Ok(views.html.movies.movie(Auth.username(request).getOrElse(null), movie, Grade.movieGrade(id)))
     }.getOrElse(NotFound)
   }
 }

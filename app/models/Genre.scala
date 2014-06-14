@@ -20,7 +20,6 @@ object Genre{
   }
 
   def addGenre(title:String) = {
-    println("addGenre: " + title)
     DB.withConnection { implicit connection =>
       SQL("Insert into genres (genrename) values({g});").on('g ->title).executeUpdate() 
     } 
@@ -35,7 +34,6 @@ object Genre{
   }
 
   def findByGenre(title:String): Option[Genre] = {
-    println("findByGenre " + title )
     DB.withConnection { implicit connection =>
         SQL("select * from genres where genrename = {t};").on('t -> title).as(simple.singleOpt)
     }

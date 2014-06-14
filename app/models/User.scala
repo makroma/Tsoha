@@ -9,8 +9,7 @@ import anorm.SqlParser._
 case class User(userid: anorm.Pk[Int] = NotAssigned, username: String, userpassword:String, admin:Boolean)
 
 
-object User { //Data Access object - Companion
-
+object User { 
 
   val simple = {
     get[Pk[Int]]("userid") ~
@@ -41,23 +40,20 @@ object User { //Data Access object - Companion
     }
   }
 
-  def findByName(name:String): Option[User] = {
+  def findByName(name: String): Option[User] = {
     DB.withConnection { implicit connection =>
       SQL("select * from users where username = {username};").on('username -> name).as(User.full.singleOpt)
     }
   }
 
-  def isAdmin(name:String): Boolean = {
-    val u:Boolean =
-      DB.withConnection { implicit connection =>
-          SQL("select admin as a from users where username = {username};").on('username -> name).as(bool("a").singleOpt)
-      }.getOrElse(false)
-    return u
+  def isAdmin(name: String): Boolean = {
+    DB.withConnection { implicit connection =>
+        SQL("select admin as a from users where username = {username};").on('username -> name).as(bool("a").singleOpt)
+    }.getOrElse(false)
   }
 
-  def idByName(name:String): Int = {
-    val userid:Pk[Int] = findByName(name).map { user => user.userid }.get
-    return userid.get
+  def idByName(name: String): Int = {
+    findByName(name).get.userid.get
   }
 
   def findAll = findAllSQL.toList.sortWith(comp)
@@ -96,7 +92,7 @@ object User { //Data Access object - Companion
         set userpassword = {p}
         where userid = {id};
         """
-        ).on('p -> password, 'id -> user.userid).executeUpdate()
+      ).on('p -> password, 'id -> user.userid).executeUpdate()
     }
   }
 }
