@@ -2,18 +2,26 @@
 @import url("//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc2/css/bootstrap-glyphicons.css");
 
 
+/* ==================================
+    Filtering 
+================================== */
+
 .filter{
-    width: 16.888%;
-    min-width: 180px;
-    max-width: 300px;
+    width: 205px;
     float: left;
     margin-right: 20px;
     margin-top: 10px;
 }
 
+/* ==================================
+    Movie box on frontpage
+================================== */
+
+
 .box-default {
     border-color: #464545;
 }
+
 .box {
     background-color: #303030;
     border: 1px solid rgba(0, 0, 0, 0);
@@ -21,25 +29,30 @@
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
     margin-bottom: 21px;
 }
+
 .box {
     border: 0 solid;
     display: inline-block;
     margin-right: 20px;
     margin-top: 10px;
     margin-bottom: 10px;
-    width: 16.888%;
-    min-width: 180px;
-    max-width: 300px;
-    height: auto;
     padding: 15px;
+
+    /* h/w set to static instead of 16,333%/auto */
+
+    height:330px;
+    width: 205px;
+    overflow: hidden;
 
     transition: all 0.2s ease;
 }
+
 .box:hover,
 .box:focus {
     text-decoration: none;
     background-color: gray;
 }
+
 .title{
     padding-top: 14px;
     text-align: center;
@@ -54,18 +67,18 @@
 }
 
 img.resize{
-    width:100%; 
-    height: auto;
+    width:175px; 
 }
+
+/* ==================================
+    Movie page
+================================== */
+
 img.cover{
     padding-bottom: 30px;
     padding-top: 5px;
     width:  100%; 
     height: auto;
-}
-
-.form-group{
-    padding-bottom: 60px;
 }
 
 .videoscreen {
@@ -75,9 +88,18 @@ img.cover{
     padding-top: 10px;
     padding-bottom: 10px;
 }
+
+/* ==================================
+    Other custom styles
+================================== */
+
 .navbar-brand.navbar-center {
     display: inline-block;
     float: none;
+}
+
+.form-group{
+    padding-bottom: 60px;
 }
 
 
