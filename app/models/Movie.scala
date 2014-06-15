@@ -45,6 +45,14 @@ object Movie{
     }
   }
 
+  def search(search:String): List[Movie] = {
+    val movies = DB.withConnection { implicit connection =>
+      SQL("select * from movies;").as(simple *)
+    }
+    val result = for(m <- movies; if(m.title.toLowerCase.contains(search.toLowerCase) | m.plot.get.toLowerCase.contains(search.toLowerCase))) yield m 
+    return result
+  }
+
   /**
   * Fuction is used to show movie page
   */

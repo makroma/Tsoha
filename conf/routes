@@ -13,6 +13,8 @@ GET /direct                         controllers.Auth.userDirect
 GET  /                              controllers.Movies.frontPage
 GET /m/:id                          controllers.Movies.showMovie(id:Int)
 GET /f/:genre                       controllers.Movies.filterByGenre(genre:String)
+GET /search/:search 				controllers.Movies.searchMovie(search:String)
+POST /postSearch					controllers.Movies.postSearch
 
 # Admin panel 
 GET /Admin                          controllers.Admin.dashboard

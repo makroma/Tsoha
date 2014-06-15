@@ -3,7 +3,7 @@
 
 
 /* ==================================
-    Filtering 
+    Filtering & search
 ================================== */
 
 .filter{
@@ -11,6 +11,12 @@
     float: left;
     margin-right: 20px;
     margin-top: 10px;
+}
+.searchbox dl{
+    margin-bottom: 2px;
+}
+.searchbox dt{
+    height: 0;
 }
 
 /* ==================================

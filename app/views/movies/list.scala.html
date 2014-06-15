@@ -1,13 +1,24 @@
-@(user:String)(active:String)(movies: List[Movie])(genres: List[Genre])(implicit flash: Flash)
+@(user:String)(active:String)(movies: List[Movie])(genres: List[Genre])(searchForm:Form[String])(implicit flash: Flash)
 
 <!--opens main.html with contructor parameters (title)(content)(loginform)-->
 @import play.api.mvc.Action
+
 
 @main(user, "FlixKiller"){
 <!--Left hand column-->
     <div class="filter">
         <!--Filters (for thrue db"genres")-->
+             @helper.form(routes.Movies.postSearch) {
+                <div class="searchbox">
+                    @helper.input(searchForm("search"), '_help -> "", '_label -> null) { (id, name, value, args) =>
+                        <input type="text" class="form-control" placeholder="Search" name="@name" @toHtmlArgs(args)>
+                    }
+                </div>  
+            }
         <ul class="nav nav-pills nav-stacked">
+           
+
+            
             <li class="@("active".when(active == "All"))"><a href="@routes.Movies.frontPage">All</a></li>
             @for(g <- genres){
                 <li class="@("active".when(active == g.title))"><a href="@routes.Movies.filterByGenre(g.title)">@g.title</a></li>
