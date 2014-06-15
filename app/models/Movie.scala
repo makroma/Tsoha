@@ -75,7 +75,7 @@ object Movie{
     } 
   }
   
-  /*
+  /**
   * filterByGenre return filtered list of movies
   */
 

@@ -24,16 +24,15 @@ object Grade{
   def movieGrade(movieid:Int):Double = {
 
     val avg = DB.withConnection { implicit connection =>
-        SQL(
-          """
-          select ROUND(CAST(avg(stars) as numeric), 2) as average from grades 
-          where movies_movieid = {m} and movies_movieid is not null;
-          """
-        ).on('m -> movieid).as(get[Option[java.math.BigDecimal]]("average").singleOpt).get
+      SQL(
+        """
+        select ROUND(CAST(avg(stars) as numeric), 2) as average from grades 
+        where movies_movieid = {m} and movies_movieid is not null;
+        """
+      ).on('m -> movieid).as(get[Option[java.math.BigDecimal]]("average").singleOpt).get
     }
     if(avg == None) 0.0
     else avg.get.doubleValue
-    
   }
 }
 

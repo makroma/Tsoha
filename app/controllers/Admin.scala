@@ -249,9 +249,13 @@ object Admin extends Controller with Secured{
     Ok(views.html.admin.editMovie(
       /*Constructor params*/
       Auth.username(request).getOrElse(null), form, movie)
-      (Genre.allSorted)
-      (views.html.admin.movies(Movie.findAll)))
+      (Genre.allSorted)(views.html.admin.movies(Movie.findAll))
+    )
   }
+  /**
+  * updatemovie form function
+  */
+
 
   def updateMovie(id:Int) = withAdmin { user => implicit request =>
     val newMovieForm = movieUpdateForm.bindFromRequest()
@@ -266,10 +270,8 @@ object Admin extends Controller with Secured{
         BadRequest(
           views.html.admin.editMovie(
           /*Constructor params*/
-          Auth.username(request).getOrElse(null), form, movie)
-          (Genre.allSorted)
-          (views.html.admin.movies(Movie.findAll))
-          (flash)
+          Auth.username(request).getOrElse(null), form, movie)(Genre.allSorted)
+          (views.html.admin.movies(Movie.findAll))(flash)
         )
       },
       success = { amovie =>

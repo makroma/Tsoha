@@ -73,14 +73,14 @@ object User {
         insert into users(username, userpassword, admin) 
         values({user}, {pssw}, false);
         """
-        ).on('user ->username, 'pssw ->password).executeUpdate() 
+      ).on('user ->username, 'pssw ->password).executeUpdate() 
     } 
   }
 
   def delete(name: String) {
     DB.withConnection { implicit c =>
-      SQL("delete from users where username = {n}").on(
-          'n -> name).executeUpdate()
+      SQL("delete from users where username = {n}"
+      ).on('n -> name).executeUpdate()
     }
   }
 
