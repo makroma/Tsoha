@@ -67,7 +67,6 @@ object Auth extends Controller with Secured{
   def userDirect = withUser { user => implicit request =>
     val username = user.username
     val admin = user.admin
-    println("userDirect: " + username + " is admin: " + admin)
     
     if(admin) Redirect(routes.Admin.dashboard).flashing(
       "success" -> "Welcome! You are now logged with adminstrator priviledges")
