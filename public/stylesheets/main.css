@@ -93,11 +93,16 @@ img.cover{
 }
 
 .videoscreen {
-    padding-top: 130px;
+    padding-top: 25px;
+
 }
 .infoscreen {
     padding-top: 10px;
     padding-bottom: 10px;
+}
+#video {
+    position: absolute;
+    right: 30px;
 }
 
 /* ==================================

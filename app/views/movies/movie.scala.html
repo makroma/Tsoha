@@ -8,40 +8,40 @@
 
     <div class="col-md-4">
         <div class="videoscreen">
-            <video id="video" class="video-js vjs-default-skin" controls
-             preload="auto" width="360" height="264" poster="MY_VIDEO_POSTER.jpg"
+            <video id="video" class="video-js vjs-default-skin vjs-big-play-centered" controls
+             preload="auto" width="320" height="450" poster="@mo.coverImg"
              data-setup="{}">
              <source src="@mo.link" type='video/mp4'>
              <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
             </video>
         </div>
     </div>
-    <div class="col-md-8">
+    <div class="col-md-5">
         <h1>@mo.title </h1>
         <div class="infoscreen">
         <p>
             @* Commented out grading system
             <p class="text-muted">
                 @if(grade > 0.0) { Ratings: @grade/10 } else { Ratings: not rated yet}<br>
-                @if(user!=null) {Give you rating:&nbsp;&nbsp; @for(i <- 1 to 10) {<a href="#"><span class="glyphicon glyphicon-star-empty"></span></a>&nbsp;}}
+                @if(user!=null) {
+                    Give you rating:&nbsp;&nbsp; 
+                    @for(i <- 1 to 10) {
+                        <a href="#"><span class="glyphicon glyphicon-star-empty"></span></a>&nbsp;
+                    }
+                }
             </p>
             *@
 
             @if(mo.year!= None){@mo.year &nbsp;&nbsp;-&nbsp;&nbsp;}
 
             @for((g, index) <- Genres.getMovieGenres(mo.title).zipWithIndex){
-                <a href="@routes.Movies.filterByGenre(g)">@g</a>@if(index < Genres.getMovieGenres(mo.title).size-1){,&nbsp;}
+                <a href="@routes.Movies.filterByGenre(g)">@g</a>@if(index < Genres.getMovieGenres(mo.title).size - 1){,&nbsp;}
             }
             &nbsp;&nbsp;-&nbsp;&nbsp;Published on 
             @Movie.addingDate(mo.title)
         </p>
         </div>
-        <div class="col-md-3">
-        <img class="cover" src="@mo.coverImg">
-        </div>
-        <div class="col-md-8">
         <p>@mo.plot</p>
-        </div>
     </div>  
 
 }(flash)
