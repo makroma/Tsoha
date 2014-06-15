@@ -18,7 +18,7 @@
     <!--Right hand column-->
 
     @for(movie <- movies) {
-        <a href="@routes.Movies.showMovie(movie.id.get)" class="box">
+        <a href="@routes.Movies.showMovie(movie.id.get)" class="box well">
            
             <!--cover image from db or from internet && ONE LINE TITLE(overflow hidden)-->
             <div class="imgbox">
