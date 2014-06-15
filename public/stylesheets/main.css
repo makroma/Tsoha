@@ -52,6 +52,10 @@
     text-decoration: none;
     background-color: gray;
 }
+.imgbox{
+    height:260px;
+    width: 175px;
+}
 
 .title{
     padding-top: 14px;

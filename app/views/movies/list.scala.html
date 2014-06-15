@@ -19,8 +19,11 @@
 
     @for(movie <- movies) {
         <a href="@routes.Movies.showMovie(movie.id.get)" class="box">
+           
             <!--cover image from db or from internet && ONE LINE TITLE(overflow hidden)-->
-            <img class="resize" src="@movie.coverImg">
+            <div class="imgbox">
+                <img class="resize" src="@movie.coverImg">
+            </div>
             <div class="title">
                 <span>@movie.title</span>
             </div>      
