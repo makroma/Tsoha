@@ -37,8 +37,7 @@ object Genres{
           """
           select count(*) as c from genres_has_movies
           where genres_genreid = (
-            select genreid from genres where genrename = {g}
-          );
+          select genreid from genres where genrename = {g});
           """
         ).on('g -> genre).apply().head
       }

@@ -44,7 +44,9 @@ object Admin extends Controller with Secured{
   val userForm: Form[Aspirant] = Form(
     mapping(
       "username" -> nonEmptyText.verifying(
-        "Not unique username", User.findByName(_).isEmpty),
+        "Not unique username", User.findByName(_).isEmpty).verifying(
+        "Username too long. Max 10 letters", _.length < 10).verifying(
+        "Username too short. Min 3 letters", _.length > 3),  
       "password" -> tuple(
           "main" -> nonEmptyText,
           "confirm" -> nonEmptyText).verifying( 
@@ -69,7 +71,7 @@ object Admin extends Controller with Secured{
     val newUserForm = userForm.bindFromRequest()
     newUserForm.fold(
       hasErrors = { form =>
-        val flash = play.api.mvc.Flash(Map("error" -> "Something went wrong, maybe passwords did not match"))
+        val flash = play.api.mvc.Flash(Map("error" -> "Something went wrong!"))
         BadRequest(views.html.admin.addUser(Auth.username(request).getOrElse(null))(form)(views.html.admin.users(User.findAll))(flash))},
 
       success = { user =>
@@ -103,7 +105,9 @@ object Admin extends Controller with Secured{
     mapping(
       "id" -> ignored(NotAssigned: anorm.Pk[Int]),
       "genre" -> text.verifying(
-        "Not unique genre", Genre.findByGenre(_).isEmpty)
+        "Not unique genre", Genre.findByGenre(_).isEmpty).verifying(
+        "Name too long", _.length < 10).verifying(
+        "Name too short", _.length > 3)  
     )(Genre.apply)(Genre.unapply)
   )
 
@@ -111,7 +115,7 @@ object Admin extends Controller with Secured{
     val newGenreForm = genreForm.bindFromRequest()
     newGenreForm.fold(
       hasErrors = { form =>
-        val flash = play.api.mvc.Flash(Map("error" -> "Genre name is taken"))
+        val flash = play.api.mvc.Flash(Map("error" -> "Something went wrong!"))
         BadRequest(views.html.admin.editGenre(Auth.username(request).getOrElse(null))(form)(views.html.admin.genres(Genre.allSorted))(flash))},
       success = { genre =>
         Genre.addGenre(genre.title)
@@ -149,12 +153,14 @@ object Admin extends Controller with Secured{
     mapping(
       "id" -> ignored(NotAssigned: anorm.Pk[Int]),
       "title" -> nonEmptyText.verifying(
-        "Not a unique name", Movie.findByName(_).isEmpty),
+        "Not a unique name", Movie.findByName(_).isEmpty).verifying(
+        "Name too long. Max 15 letters", _.length <= 15).verifying(
+        "Name too short. Min 2 letters", _.length >= 2),  
       "link" -> optional(text),
       "coverimg" -> optional(text),
       "genres" -> list(text),
       "plot" -> optional(text),
-      "year" -> optional(number)
+      "year" -> optional(number.verifying("Minimum year 1900", _ >= 1900).verifying("Max year 2050", _ <= 2050))
     )(Movie.apply)(Movie.unapply)
   )
 
@@ -230,12 +236,15 @@ object Admin extends Controller with Secured{
     //maps form content
     mapping(
       "id" -> ignored(NotAssigned: anorm.Pk[Int]),
-      "title" -> text,
+      "title" -> text.verifying(
+        "Not a unique name", Movie.findByName(_).isEmpty).verifying(
+        "Name too long. Max 15 letters", _.length <= 15).verifying(
+        "Name too short. Min 2 letters", _.length >= 2),  
       "link" -> optional(text),
       "coverimg" -> optional(text),
       "genres" -> list(text),
       "plot" -> optional(text),
-      "year" -> optional(number)
+      "year" -> optional(number.verifying("Minimum year 1900", _ >= 1900).verifying("Max year 2050", _ <= 2050))
     )(Movie.apply)(Movie.unapply)
   )
 
